@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head th:replace="customer/common :: head">
+</head>
+
+<body>
+    <!-- Header Section Begin -->
+    <header th:replace="customer/common :: header"></header>
+    <!-- Header End -->
+
+    <!-- Breadcrumb Section Begin -->
+    <div th:replace="customer/common :: breacrumb-section-info"></div>
+    <!-- Breadcrumb Form Section Begin -->
+
+    <!-- Info User -->
+    	<section class="checkout-section spad">
+        <div class="container">
+            <form class="checkout-form" th:action="@{/userInfo}" th:object="${appUser}" method = "POST">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h4>Info User: <span th:text = "*{lastName}"></span> <span th:text = "*{firstName}"></span></h4>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label for="fir">Tên<span>*</span></label>
+                                <input type="text" id="fir" name = "firstName" th:field = "*{firstName}">
+                               
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="last">Họ<span>*</span></label>
+                                <input type="text" id="last" name="lastName" th:field = "*{lastName}">
+                            </div>
+                            <div class="col-lg-12">
+                                <label for="street">Số nhà (Phố/Phường)<span>*</span></label>
+                                <input type="text" id="street" name ="street" th:field = "*{street}" class="street-first">
+                                <input type="text">
+                            </div>
+                            <div class="col-lg-12">
+                                <label for="town">Thành Phố<span>*</span></label>
+                                <input type="text" id="town" name ="town" th:field = "*{town}">
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="email">Email Address<span>*</span></label>
+                                <input type="text" id="email" name = "email" th:field = "*{email}">
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="phone">Số điện thoại<span>*</span></label>
+                                <input type="text" id="phone" name = "phone" th:field = "*{phone}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="place-order">
+                            <h4>Hello : <span th:text="${#request.userPrincipal.name}"></span></h4>
+                            <div class="order-total">
+                                <ul class="order-table">
+                                    <li>Product <span>Total</span></li>
+                                    <li class="fw-normal">Combination x 1 <span>$60.00</span></li>
+                                    <li class="fw-normal">Combination x 1 <span>$60.00</span></li>
+                                    <li class="fw-normal">Combination x 1 <span>$120.00</span></li>
+                                    <li class="fw-normal">Subtotal <span>$240.00</span></li>
+                                    <li class="total-price">Total <span>$240.00</span></li>
+                                </ul>
+                                <div class="payment-check">
+                                    <div class="pc-item">
+                                        <label for="pc-check">
+                                            Cheque Payment
+                                            <input type="checkbox" id="pc-check">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                    <div class="pc-item">
+                                        <label for="pc-paypal">
+                                            Paypal
+                                            <input type="checkbox" id="pc-paypal">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="order-btn">
+                                    <button type="submit" class="site-btn place-btn">Update Your Info Here</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+    
+    <!-- Register Form Section End -->
+
+    <!-- Partner Logo Section Begin -->
+    <div th:replace="customer/common :: logo"></div>
+    <!-- Partner Logo Section End -->
+
+    <!-- Footer Section Begin -->
+    <footer th:replace="customer/common :: footer"></footer>
+    <!-- Footer Section End -->
+</body>
+
+</html>

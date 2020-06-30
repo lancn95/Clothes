@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="customer/common :: head">
+</head>
+
+<body>
+
+    <!-- Header Section Begin -->
+    <header th:replace="customer/common :: header"></header>
+    <!-- Header End -->
+
+    <!-- Breadcrumb Section Begin -->
+    <div th:replace="customer/common :: breacrumb-section-register"></div>
+    <!-- Breadcrumb Form Section Begin -->
+
+    <!-- Register Section Begin -->
+    <div class="register-login-section spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 offset-lg-3">
+                    <div class="register-form">
+                        <h2>Register</h2>
+                        <span th:text="${duplicate_name}" style="font-style:italic;color:red"></span><br>
+                        <span th:text="${duplicate_email}" style="font-style:italic;color:red"></span>
+                        <form th:action="@{/register}" method = "POST" th:object = "${appUser}" id="form-register">
+                            <div class="group-input">
+                                <label for="username">Username *</label>
+                                <input type="text" id="name" th:field = "*{userName}" placeholder = "Ex: Lan Cat" 
+                              	>
+                                <span id="name_error" style="font-style:italic;color:red"></span>
+                            </div>
+                        
+                            <div class="group-input">
+                                <label for="pass">Password *</label>
+                                <input type="password" id="pass" th:field = "*{encrytedPassword}" placeholder = ""
+                                >
+                                <span id="pass_error" style="font-style:italic;color:red"></span>
+                            </div>
+                            <div class="group-input">
+                                <label for="con-pass">Confirm Password *</label>
+                                <input type="password" id="repeatPass">
+                                <span id="repeatPass_error" style="font-style:italic;color:red"></span>
+                            </div>
+                            <div class="group-input">
+                                <label for="email">Email address *</label>
+                                <input type="text" id="email" th:field = "*{email}" placeholder = "Ex:catngoclan@gmail.com"
+                                >
+                                <span id="email_error" style="font-style:italic;color:red"></span>
+                            </div>
+                            <button type="submit" class="site-btn register-btn">REGISTER</button>
+                        </form>
+                        <div class="switch-login">
+                            <a th:href="@{/login}" id="register" class="or-login">Or Login</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Register Form Section End -->
+    
+    <!-- Partner Logo Section Begin -->
+     <div th:replace="customer/common :: logo"></div>
+    <!-- Partner Logo Section End -->
+
+    <!-- Footer Section Begin -->
+    <footer th:replace="customer/common :: footer"></footer>
+    <!-- Footer Section End -->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+	<script type="text/javascript" src="js/register.js"></script>
+</body>
+
+</html>

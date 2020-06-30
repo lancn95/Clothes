@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Access Denied</title>
+</head>
+<body>
+	<!-- Include _menu.html -->
+	<th:block th:include="/_menu"></th:block>
+	
+	<h3 th:if="${message != null}" th:text="${message}" style="color:red"></h3>
+	
+	<div th:if="${userInfo != null}" th:text = ${userInfo}></div>
+</body>
+</html>

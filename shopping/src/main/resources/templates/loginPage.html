@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+</head>
+<body>
+	<!-- Include _menu.html -->
+	<th:block th:include="/_menu"></th:block>
+	
+	<h1>Login</h1>
+	
+	<!-- /login?error=true -->
+	<p th:if="${#request.getParameter('error') == 'true'}" style="color:red">Invalid username or password</p>
+	
+	<h3>Enter your username and password</h3>
+	<form name='f' th:action="@{/login}" method="POST">
+		<table>
+			<tr>
+				<td>User:</td>
+				<td><input type="text" name ="username" placeholder="Your username" /></td>
+			</tr>
+			<tr>
+				<td>Password:</td>
+				<td><input type="password" name ="password" placeholder="Your password" /></td>
+			</tr>
+			<tr>
+				<td>&nbsp;:</td>
+				<td><input type="submit" name="submit" value="Login" /></td>
+			</tr>
+		</table>
+	
+	</form>
+</body>
+</html>
