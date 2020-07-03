@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="customer/common :: head"></head>
+
+<body>
+	<!-- Header Section Begin -->
+    <header th:replace="customer/common :: header"></header>
+    <!-- Header End -->
+    
+     <div th:replace="customer/common :: breacrumb-section-shop"></div>
+     
+	<div class="container">
+		<!-- <div class="row">
+			<div style="display:flex;justify-content: space-between;">
+				<div>
+					<a th:href="@{/nhanvien-save}" class="btn btn-success pull-left">
+						<span class="glyphicon glyphicon-plus"></span> Thﾃｪm m盻嬖 nhﾃ｢n viﾃｪn
+					</a>
+				</div>
+
+				<div>
+					<form th:action=@{/nhanvien-search} class="form inline pull-right"
+						method="GET">
+						<div class="form-group">
+							<input type="text" placeholder="Tﾃｬm ki蘯ｿm theo tﾃｪn nhﾃ｢n viﾃｪn"
+								name="name" />
+							<button type="submit" class="btn btn-primary">Tﾃｬm Ki蘯ｿm</button>
+						</div>
+
+					</form>
+				</div>
+			</div>
+		</div> -->
+
+		<th:block th:if="${#lists.isEmpty(products)}">
+			<h3>Không có sản phẩm nào</h3>
+		</th:block>
+
+		<th:block th:unless="${#lists.isEmpty(products)}">
+			<table class="table table-bordered table-hover">
+				<thead>
+					<tr>
+						<th>Số thứ tự</th>
+						<th>Mã sản phẩm</th>
+						<th>Tên sản phẩm</th>
+						<th>Cập nhật</th>
+						<th>Xóa</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="product, iterStat : ${porducts}">
+						<td th:text="${iterStat.count}"></td>
+						<td th:text="${product.code}"></td>
+						<td th:text="${product.name}"></td>
+						<td><a
+							th:href="@{/product-update/} + ${product.code}"> <span
+								class="glyphicon glyphicon-pencil"></span>
+						</a></td>
+						<td><a
+							th:href="@{/product-delete/} + ${product.code}"
+							onclick="if(!(confirm('B蘯｡n cﾃｳ ch蘯ｯc ch蘯ｯn mu盻創 xﾃｳa nhﾃ｢n viﾃｪn nﾃ�y khﾃｴng ?'))) return false">
+								<span class="glyphicon glyphicon-trash"></span>
+						</a></td>
+					</tr>
+				</tbody>
+			</table>
+		</th:block>
+	</div>
+</body>
+ <footer th:replace="customer/common :: footer"></footer>
+</html>

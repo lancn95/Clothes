@@ -1,4 +1,4 @@
-package com.example.shopping.service.Impl;
+package com.example.shopping.service;
 
 import java.util.ArrayList;
 import java.util.List;

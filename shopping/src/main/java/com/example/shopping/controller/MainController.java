@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.shopping.entities.AppUser;
+import com.example.shopping.entities.Product;
+import com.example.shopping.service.Impl.ProductServiceImpl;
 import com.example.shopping.service.Impl.UserServiceImpl;
 import com.example.shopping.untils.WebUtils;
 
@@ -22,6 +24,9 @@ public class MainController {
 
 	@Autowired
 	private UserServiceImpl userServiceImpl;
+	
+	@Autowired
+	private ProductServiceImpl productServiceImpl;
 
 	@RequestMapping(value = { "/", "/welcome" }, method = RequestMethod.GET)
 	public String welcomePage(Model model) {
@@ -29,7 +34,30 @@ public class MainController {
 		model.addAttribute("message", "This is welcome page!");
 		return "customer/index";
 	}
-
+	
+	@RequestMapping(value = "/productList", method = RequestMethod.GET)
+	public String listProductHandler(Model model) {
+		List<Product> products = productServiceImpl.findAll();
+		model.addAttribute("products", products);
+		return "customer/list_test";
+	}
+	
+	@RequestMapping(value = "/product-update/{id}", method = RequestMethod.GET)
+	public String getInfoProduct() {
+		return "customer/product_update";
+	}
+	
+	@RequestMapping(value = "/product-update/{id}", method = RequestMethod.POST)
+	public String updateProduct() {
+		return "redirect:/";
+	}
+	
+	@RequestMapping(value = "/product-delete/{id}", method = RequestMethod.GET)
+	public String deleteProduct() {
+		return "redirect:/";
+	}
+	
+	
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String register(Model model) {
 		AppUser appUser = new AppUser();
@@ -130,11 +158,13 @@ public class MainController {
 	public String adminPage(Model model, Principal principal) {
 
 		User loginedUser = (User) ((Authentication) principal).getPrincipal();
-
+		System.out.println("useradminname: " + principal.getName());
+		
 		String userInfo = WebUtils.toString(loginedUser);
+		String adminname = principal.getName();
 		model.addAttribute("userInfo", userInfo);
-
-		return "adminPage";
+		model.addAttribute("name", adminname);
+		return "admin/index";
 	}
 
 	@RequestMapping(value = "/403", method = RequestMethod.GET)
