@@ -3,15 +3,18 @@ package com.example.shopping.service;
 import java.util.List;
 
 import com.example.shopping.entities.Product;
+import com.example.shopping.form.ProductForm;
 
 public interface ProductService {
 	List<Product> findAll();
 	
-	void save(Product product);
+	Product findProduct(String code);
 	
-	void update(Product product);
+	void save(ProductForm productForm);
 	
-	void delete(Product product);
+	void update(ProductForm productForm);
+	
+	void delete(ProductForm productForm);
 	
 	List<Product> seachByNameLike(String name);
 }

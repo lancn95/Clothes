@@ -71,8 +71,14 @@ public class AppUserDAO {
 			// nativeQuery :query theo table name,field ở trong Database
 			entityManager.createNativeQuery(
 					"UPDATE App_User SET First_Name = ?, Last_Name = ?, Street = ?, Town = ?, Email = ?, phone = ? WHERE User_Name = ?")
-					.setParameter(1, firstName).setParameter(2, lastName).setParameter(3, street).setParameter(4, town)
-					.setParameter(5, email).setParameter(6, phone).setParameter(7, userName).executeUpdate();
+					.setParameter(1, firstName)
+					.setParameter(2, lastName)
+					.setParameter(3, street)
+					.setParameter(4, town)
+					.setParameter(5, email)
+					.setParameter(6, phone)
+					.setParameter(7, userName)
+					.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.shopping.dao.ProductDAO;
 import com.example.shopping.entities.Product;
+import com.example.shopping.form.ProductForm;
 import com.example.shopping.service.ProductService;
 
 @Service
@@ -18,26 +19,19 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<Product> findAll() {
 		List<Product> products = this.productDAO.findAll();
-		
+
 		return products;
 	}
 
 	@Override
-	public void save(Product product) {
-		// TODO Auto-generated method stub
+	public void save(ProductForm productForm) {
+		productDAO.saveProduct(productForm);
 
 	}
 
 	@Override
-	public void update(Product product) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void delete(Product product) {
-		// TODO Auto-generated method stub
-
+	public void update(ProductForm productForm) {
+		productDAO.updateProduct(productForm);
 	}
 
 	@Override
@@ -45,5 +39,18 @@ public class ProductServiceImpl implements ProductService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Product findProduct(String code) {
+		Product product = productDAO.findProduct(code);
+		return product;
+	}
+
+	@Override
+	public void delete(ProductForm productForm) {
+		productDAO.deleteProduct(productForm);
+
+	}
+
 
 }

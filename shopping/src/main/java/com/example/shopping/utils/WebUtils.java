@@ -1,4 +1,4 @@
-package com.example.shopping.untils;
+package com.example.shopping.utils;
 
 import java.util.Collection;
 

@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 import com.example.shopping.dao.AppUserDAO;
 import com.example.shopping.entities.AppUser;
 import com.example.shopping.service.UserService;
-import com.example.shopping.untils.EncrytedPasswordUtils;
+import com.example.shopping.utils.EncrytedPasswordUtils;
 
 @Service
 public class UserServiceImpl implements UserService{

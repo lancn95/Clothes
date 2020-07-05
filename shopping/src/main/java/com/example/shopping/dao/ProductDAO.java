@@ -47,6 +47,7 @@ public class ProductDAO {
 
 			return (Product) query.getSingleResult();
 		} catch (NoResultException e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -77,6 +78,7 @@ public class ProductDAO {
 		}
 		product.setCode(code);
 		product.setName(productForm.getName());
+		product.setDescription(productForm.getDescription());
 		product.setPrice(productForm.getPrice());
 
 		if (productForm.getFileData() != null) {
@@ -96,6 +98,50 @@ public class ProductDAO {
 		}
 		// Nếu có lỗi tại DB, ngoại lệ sẽ ném ra ngay lập tức
 		session.flush();
+	}
+	
+	@SuppressWarnings("unused")
+	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
+	public void updateProduct(ProductForm productForm) {
+		Session session = sessionFactory.getCurrentSession();
+		String code = productForm.getCode();
+		
+		Product	product = this.findProduct(code);
+		product.setCode(code);
+		product.setName(productForm.getName());
+		product.setDescription(productForm.getDescription());
+		product.setPrice(productForm.getPrice());
+		
+		if(productForm.getFileData() != null) {
+			byte[] image = null;
+			try {
+				image = productForm.getFileData().getBytes();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			if (image != null && image.length > 0) {
+				product.setImage(image);
+			}
+
+		}
+		session.update(product);
+		
+		session.flush();
+		
+	}
+	
+	@SuppressWarnings("unused")
+	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
+	public void deleteProduct(ProductForm productForm) {
+		Session session = sessionFactory.getCurrentSession();
+		String code = productForm.getCode();
+		
+		Product	product = this.findProduct(code);
+		// session.delete(object) chỉ thực hiện đc khi chưa có khóa chính hoặc ngoại
+		session.delete(product);
+		
+		session.flush();
+		
 	}
 
 }

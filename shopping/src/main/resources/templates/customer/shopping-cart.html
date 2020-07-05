@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="customer/common :: head"></head>
+<body>
+
+	<!-- Header Section Begin -->
+    <header th:replace = "customer/common :: header"></header>
+    <!-- Header End -->
+
+    <!-- Breadcrumb Section Begin -->
+    <div th:replace = "customer/common :: breacrumb-section-shoppingcart"></div>
+    <!-- Breadcrumb Section Begin -->
+
+    <!-- Shopping Cart Section Begin -->
+    <section class="shopping-cart spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="cart-table">
+                     <th:block th:if="${cartForm == null || cartForm.cartLines == null || cartForm.cartLines.empty}">
+				         <h2>There is no items in Cart</h2>
+				         <a th:href="@{/productList}">Show Product List</a>
+				      </th:block>
+				      
+				    <th:block th:if="${cartForm != null && cartForm.cartLines != null && !cartForm.cartLines.empty}">
+                    <form method="POST" th:object="${cartForm}" th:action="@{/shoppingCart}">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th class="p-name">Product Name</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                    <th><i class="ti-close"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each = "cartLineInfo : ${cartForm.cartLines}">
+                                    <td class="cart-pic first-row">
+                                    	<img th:src="@{|/productImage?code=${cartLineInfo.productInfo.code}|}" alt="" style="width:150px">
+                                    </td>
+                                    <td class="cart-title first-row">
+                                        <h5 th:text="${cartLineInfo.productInfo.name}"></h5>
+                                    </td>
+                                    <td class="p-price first-row" th:text="${#numbers.formatDecimal(cartLineInfo.productInfo.price,2,3,'COMMA')}"></td>
+                                    <td class="qua-col first-row">
+                                        <div class="quantity">
+                                            <div class="pro-qty">
+                                                <input type="number" th:value="${cartLineInfo.quantity}">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="total-price first-row" th:text="${#numbers.formatDecimal(cartLineInfo.amount,2,3,'COMMA')}"></td>
+                                    <td class="close-td first-row">
+                                    	<a th:href="@{|/shoppingCartRemoveProduct?code=${cartLineInfo.productInfo.code}|}">Xóa</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table> 
+                         <button type="submit" class="site-btn coupon-btn">Update cart</button>
+                         
+                         </form>
+                         </th:block>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="cart-buttons">
+                                <a th:href="@{/productList}" class="primary-btn continue-shop">Continue shopping</a>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4 offset-lg-4">
+                            <div class="proceed-checkout">
+                                <ul>
+                                    <li class="subtotal">Subtotal <span>$240.00</span></li>
+                                    <li class="cart-total">Total <span>$240.00</span></li>
+                                </ul>
+                                <a href="#" class="proceed-btn">PROCEED TO CHECK OUT</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Shopping Cart Section End -->
+
+    <!-- Partner Logo Section Begin -->
+    <div th:replace = "customer/common :: logo"></div>
+    <!-- Partner Logo Section End -->
+
+    <!-- Footer Section Begin -->
+    <footer th:replace = "customer/common :: footer"></footer>
+    <!-- Footer Section End -->
+</body>
+
+</html>

@@ -1,32 +1,65 @@
 package com.example.shopping.controller;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 
 import com.example.shopping.entities.AppUser;
 import com.example.shopping.entities.Product;
+import com.example.shopping.model.CartInfo;
+import com.example.shopping.model.ProductInfo;
 import com.example.shopping.service.Impl.ProductServiceImpl;
 import com.example.shopping.service.Impl.UserServiceImpl;
-import com.example.shopping.untils.WebUtils;
+import com.example.shopping.utils.Utils;
+import com.example.shopping.utils.WebUtils;
 
 @Controller
 public class MainController {
 
 	@Autowired
 	private UserServiceImpl userServiceImpl;
-	
+
 	@Autowired
 	private ProductServiceImpl productServiceImpl;
+	
+	@InitBinder
+    public void myInitBinder(WebDataBinder dataBinder) {
+        Object target = dataBinder.getTarget();
+        if (target == null) {
+            return;
+        }
+        System.out.println("Target=" + target);
+ 
+        // Trường hợp update SL trên giỏ hàng.
+        // (@ModelAttribute("cartForm") @Validated CartInfo cartForm)
+        if (target.getClass() == CartInfo.class) {
+ 
+        }
+ 
+        // Trường hợp save thông tin khách hàng.
+        // (@ModelAttribute @Validated CustomerInfo customerForm)
+        //else if (target.getClass() == CustomerForm.class) {
+            //dataBinder.setValidator(customerFormValidator);
+        //}
+ 
+    }
 
 	@RequestMapping(value = { "/", "/welcome" }, method = RequestMethod.GET)
 	public String welcomePage(Model model) {
@@ -34,30 +67,88 @@ public class MainController {
 		model.addAttribute("message", "This is welcome page!");
 		return "customer/index";
 	}
-	
+
 	@RequestMapping(value = "/productList", method = RequestMethod.GET)
 	public String listProductHandler(Model model) {
 		List<Product> products = productServiceImpl.findAll();
 		model.addAttribute("products", products);
-		return "customer/list_test";
+		return "customer/shop";
+	}
+
+	@RequestMapping(value = "/productDetail", method = RequestMethod.GET)
+	public String detailProduct(@RequestParam("code") String code, Model model) {
+		Product product = null;
+		if (code != null && code.length() > 0) {
+			product = productServiceImpl.findProduct(code);
+		}
+		model.addAttribute("product", product);
+		return "customer/product";
+	}
+
+	@RequestMapping(value = "/buyProduct", method = RequestMethod.GET)
+	public String buyProduct(HttpServletRequest request, Model model, @RequestParam("code") String code) {
+		Product product = null;
+
+		if (code != null && code.length() > 0) {
+			product = productServiceImpl.findProduct(code);
+		}
+		if (product != null) {
+
+			CartInfo cartInfo = Utils.getInfoCartInSession(request);
+
+			ProductInfo productInfo = new ProductInfo(product);
+
+			cartInfo.addProduct(productInfo, 1);
+		}
+
+		return "redirect:/shoppingCart";
+	}
+
+	@RequestMapping(value = "/shoppingCartRemoveProduct", method = RequestMethod.GET)
+	public String shoppingCartRemoveProduct(HttpServletRequest request, Model model,
+			@RequestParam("code") String code) {
+		Product product = null;
+		if (code != null && code.length() > 0) {
+			product = productServiceImpl.findProduct(code);
+		}
+		if (product != null) {
+			CartInfo cartInfo = Utils.getInfoCartInSession(request);
+
+			ProductInfo productInfo = new ProductInfo(product);
+
+			cartInfo.removeProduct(productInfo);
+		}
+
+		return "redirect:/shoppingCart";
 	}
 	
-	@RequestMapping(value = "/product-update/{id}", method = RequestMethod.GET)
-	public String getInfoProduct() {
-		return "customer/product_update";
+	
+	// GET: Hiển thị giỏ hàng.
+	@RequestMapping(value = {"/shoppingCart"}, method = RequestMethod.GET)
+	public String showShoppingCart( Model model, HttpServletRequest request) {
+		CartInfo mycart = Utils.getInfoCartInSession(request);
+		System.out.println("info cartForm in GET: " + mycart.getCartLines());
+		
+		model.addAttribute("cartForm", mycart);
+		
+		return "customer/shopping-cart";
 	}
-	
-	@RequestMapping(value = "/product-update/{id}", method = RequestMethod.POST)
-	public String updateProduct() {
-		return "redirect:/";
+
+	// POST: Cập nhập số lượng cho các sản phẩm đã mua.
+	@RequestMapping(value = {"/shoppingCart"}, method = RequestMethod.POST)
+	public String shoppingCartUpdateQuantity(@ModelAttribute("cartForm") CartInfo mycart,
+											HttpServletRequest request,Model model
+										) {
+		System.out.println("info cartForm : " + mycart.getCartLines());
+		
+		CartInfo cartInfo = Utils.getInfoCartInSession(request);
+		
+		cartInfo.updateQuantity(mycart);
+
+		return "redirect:/shoppingCart";
 	}
-	
-	@RequestMapping(value = "/product-delete/{id}", method = RequestMethod.GET)
-	public String deleteProduct() {
-		return "redirect:/";
-	}
-	
-	
+		
+
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String register(Model model) {
 		AppUser appUser = new AppUser();
@@ -111,7 +202,8 @@ public class MainController {
 	}
 
 	@RequestMapping(value = "/userAccountInfo", method = RequestMethod.GET)
-	public String userAccountInfo(Model model) {
+	public String userAccountInfo(Model model, Principal principal) {
+
 		return "redirect:/userInfo";
 	}
 
@@ -159,7 +251,7 @@ public class MainController {
 
 		User loginedUser = (User) ((Authentication) principal).getPrincipal();
 		System.out.println("useradminname: " + principal.getName());
-		
+
 		String userInfo = WebUtils.toString(loginedUser);
 		String adminname = principal.getName();
 		model.addAttribute("userInfo", userInfo);
@@ -188,5 +280,19 @@ public class MainController {
 	public String logoutSuccessfulPage(Model model) {
 		model.addAttribute("title", "Logout");
 		return "redirect:/";
+	}
+
+	@RequestMapping(value = { "/productImage" }, method = RequestMethod.GET)
+	public void productImage(HttpServletRequest request, HttpServletResponse response, Model model,
+			@RequestParam("code") String code) throws IOException {
+		Product product = null;
+		if (code != null) {
+			product = this.productServiceImpl.findProduct(code);
+		}
+		if (product != null && product.getImage() != null) {
+			response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
+			response.getOutputStream().write(product.getImage());
+		}
+		response.getOutputStream().close();
 	}
 }

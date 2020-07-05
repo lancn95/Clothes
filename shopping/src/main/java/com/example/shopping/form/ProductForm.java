@@ -22,6 +22,7 @@ public class ProductForm {
 	public ProductForm(Product product) {
 		this.code = product.getCode();
 		this.name = product.getName();
+		this.description = product.getDescription();
 		this.price = product.getPrice();
 
 	}

@@ -9,13 +9,13 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4">Tạo sản phẩm Mới</h1>
+                        <h1 class="mt-4">Cập nhật sản phẩm </h1>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Tạo sản phẩm Mới</li>
+                            <li class="breadcrumb-item active">Cập nhât sản phẩm</li>
                         </ol>
                         <div class="row">
                         	<div class="col-md-6">
-								<form method="POST" th:action="@{/admin/product-save}"
+								<form method="POST" th:action="@{/admin/product-update}"
 									th:object="${productForm}" enctype="multipart/form-data">
 									<div class="form-group">
 										<label for="name">Mã Sản Phẩm</label> <input
