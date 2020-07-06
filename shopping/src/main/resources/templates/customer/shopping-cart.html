@@ -24,7 +24,7 @@
 				      </th:block>
 				      
 				    <th:block th:if="${cartForm != null && cartForm.cartLines != null && !cartForm.cartLines.empty}">
-                    <form method="POST" th:object="${cartForm}" th:action="@{/shoppingCart}">
+                     <form method="POST" th:object="${cartForm}" th:action="@{/shoppingCart}">
                         <table>
                             <thead>
                                 <tr>
@@ -37,18 +37,26 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr th:each = "cartLineInfo : ${cartForm.cartLines}">
+                                <tr th:each = "cartLineInfo, varStatus : ${cartForm.cartLines}">
                                     <td class="cart-pic first-row">
                                     	<img th:src="@{|/productImage?code=${cartLineInfo.productInfo.code}|}" alt="" style="width:150px">
                                     </td>
                                     <td class="cart-title first-row">
                                         <h5 th:text="${cartLineInfo.productInfo.name}"></h5>
+                                        <input type="hidden"      
+				                           th:name="|cartLines[${varStatus.index}].productInfo.code|"                       
+				                           th:value="${cartLineInfo.productInfo.code}" />
                                     </td>
-                                    <td class="p-price first-row" th:text="${#numbers.formatDecimal(cartLineInfo.productInfo.price,2,3,'COMMA')}"></td>
+                                    <td class="p-price first-row" th:text="${#numbers.formatDecimal(cartLineInfo.productInfo.price,2,3,'COMMA')}">
+                                    	<input type="hidden"      
+				                           th:name="|cartLines[${varStatus.index}].productInfo.price|"                       
+				                           th:value="${cartLineInfo.productInfo.price}" />
+                                    </td>
                                     <td class="qua-col first-row">
                                         <div class="quantity">
                                             <div class="pro-qty">
-                                                <input type="number" th:value="${cartLineInfo.quantity}">
+                                                <input type="number" th:name="|cartLines[${varStatus.index}].quantity|"
+                                                 th:value="${cartLineInfo.quantity}" />
                                             </div>
                                         </div>
                                     </td>
@@ -74,10 +82,10 @@
                         <div class="col-lg-4 offset-lg-4">
                             <div class="proceed-checkout">
                                 <ul>
-                                    <li class="subtotal">Subtotal <span>$240.00</span></li>
-                                    <li class="cart-total">Total <span>$240.00</span></li>
+                                    <li class="subtotal">Subtotal<span th:text="${#numbers.formatDecimal(cartForm.amountTotal,2,3,'COMMA')}"></span></li>
+                                    <li class="cart-total">Total <span th:text="${#numbers.formatDecimal(cartForm.amountTotal,2,3,'COMMA')}"></span></li>
                                 </ul>
-                                <a href="#" class="proceed-btn">PROCEED TO CHECK OUT</a>
+                                <a th:href="@{/shoppingCartCustomer}" class="proceed-btn">PROCEED TO CHECK OUT</a>
                             </div>
                         </div>
                     </div>

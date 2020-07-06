@@ -88,4 +88,28 @@ public class CartInfo {
 			}
 		}
 	}
+
+	public double getAmountTotal() {
+		double total = 0;
+		for (CartLineInfo line : this.cartLines) {
+			total += line.getAmount();
+		}
+		return total;
+	}
+
+	public double getQuantityTotal() {
+		double quantity = 0;
+		for (CartLineInfo line : this.cartLines) {
+			quantity += line.getQuantity();
+		}
+		return quantity;
+	}
+
+	public boolean isEmpty() {
+		return this.cartLines.isEmpty();
+	}
+	
+	public boolean isValidCustomer() {
+		return this.customerInfo != null && this.customerInfo.isValid();
+	}
 }

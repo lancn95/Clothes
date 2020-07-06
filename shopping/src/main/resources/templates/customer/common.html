@@ -98,7 +98,7 @@
                             </li>
                             <li class="cart-icon"><a href="#">
                                     <i class="icon_bag_alt"></i>
-                                    <span>3</span>
+                                    <span th:text="${#numbers.formatDecimal(quantity,2,1,'COMMA')}">2</span>
                                 </a>
                                 <div class="cart-hover">
                                     <div class="select-items">
@@ -349,6 +349,7 @@
         </div>
     </div>
     
+    <!-- Breadcrumb Form Section Begin info user -->
     <div class="breacrumb-section" th:fragment="breacrumb-section-info">
         <div class="container">
             <div class="row">
@@ -361,6 +362,8 @@
             </div>
         </div>
     </div>
+    <!-- Breadcrumb Section End user -->
+    <!-- Breadcrumb Form Section Begin shop -->
     
     <div class="breacrumb-section" th:fragment="breacrumb-section-shop">
         <div class="container">
@@ -374,7 +377,8 @@
             </div>
         </div>
     </div>
-    <!-- Breadcrumb Form Section Begin -->
+    <!-- Breadcrumb Section End shop -->
+    <!-- Breadcrumb Form Section Begin detail -->
     
     <div class="breacrumb-section" th:fragment="breacrumb-section-detail">
         <div class="container">
@@ -389,7 +393,9 @@
             </div>
         </div>
     </div>
+	<!-- Breadcrumb Section End detail -->
 	
+	<!-- Breadcrumb Section Begin shoppingcart -->
 	<div class="breacrumb-section" th:fragment="breacrumb-section-shoppingcart">
         <div class="container">
             <div class="row">
@@ -403,7 +409,38 @@
             </div>
         </div>
     </div>
+	<!-- Breadcrumb Section End shoppingcart -->
 	
+	<!-- Breadcrumb Section Begin checkout -->
+    <div class="breacrumb-section-checkout" th:fragment="breacrumb-section-checkout">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb-text product-more">
+                        <a href="./index.html"><i class="fa fa-home"></i> Home</a>
+                        <a href="./shop.html">Shop</a>
+                        <span>Check Out</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb Section Begin checkout -->
+	
+	<!-- Breadcrumb Section Begin -->
+    <div class="breacrumb-section-thank-you" th:fragment="breacrumb-section-thank-you">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb-text">
+                        <a href="#"><i class="fa fa-home"></i> Home</a>
+                        <span>Thank You</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb Section Begin -->
 	
     <!-- Register Section Begin -->
     <div class="register-login-section spad">

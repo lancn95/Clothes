@@ -18,4 +18,17 @@ public class Utils {
 
 		return cartInfo;
 	}
+
+	public static void removeCartInSession(HttpServletRequest request) {
+		request.getSession().removeAttribute("mycart");
+	}
+
+	public static void storeLastOrderedCartInSession(HttpServletRequest request, CartInfo cartInfo) {
+		request.getSession().setAttribute("lastOrderCart", cartInfo);
+	}
+
+	public static CartInfo getLastOrderCartInSession(HttpServletRequest request) {
+		
+		return (CartInfo) request.getSession().getAttribute("lastOrderCart");
+	}
 }
