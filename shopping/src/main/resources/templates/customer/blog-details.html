@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<html lang="zxx">
 
-<head th:fragment="head">
+<head>
     <meta charset="UTF-8">
     <meta name="description" content="Fashi Template">
     <meta name="keywords" content="Fashi, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Lan | design</title>
+    <title>Fashi | Template</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css?family=Muli:300,400,500,600,700,800,900&display=swap" rel="stylesheet">
@@ -22,7 +22,6 @@
     <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css">
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
-    
 </head>
 
 <body>
@@ -32,13 +31,13 @@
     </div>
 
     <!-- Header Section Begin -->
-    <header class="header-section" th:fragment="header">
+    <header class="header-section">
         <div class="header-top">
             <div class="container">
                 <div class="ht-left">
                     <div class="mail-service">
                         <i class=" fa fa-envelope"></i>
-                       catngoclan95@gmail.com
+                        hello.colorlib@gmail.com
                     </div>
                     <div class="phone-service">
                         <i class=" fa fa-phone"></i>
@@ -46,13 +45,7 @@
                     </div>
                 </div>
                 <div class="ht-right">
-                   <a th:if="${#request.userPrincipal == null}" th:href="@{/login}" class="login-panel">
-                   		<i class="fa fa-user"></i>Login
-                   </a>
-
-                   <a th:if="${#request.userPrincipal != null}" th:href = "@{/logout}" class="login-panel">
-                   		<i class="fa fa-user"></i>Logout
-                   </a>
+                    <a href="#" class="login-panel"><i class="fa fa-user"></i>Login</a>
                     <div class="lan-selector">
                         <select class="language_drop" name="countries" id="countries" style="width:300px;">
                             <option value='yt' data-image="img/flag-1.jpg" data-imagecss="flag yt"
@@ -80,7 +73,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="col-lg-7 col-lg-7">
+                    <div class="col-lg-7 col-md-7">
                         <div class="advanced-search">
                             <button type="button" class="category-btn">All Categories</button>
                             <form action="#" class="input-group">
@@ -89,7 +82,7 @@
                             </form>
                         </div>
                     </div>
-                    <div class="col-lg-3 text-right col-lg-3">
+                    <div class="col-lg-3 text-right col-md-3">
                         <ul class="nav-right">
                             <li class="heart-icon"><a href="#">
                                     <i class="icon_heart_alt"></i>
@@ -98,7 +91,7 @@
                             </li>
                             <li class="cart-icon"><a href="#">
                                     <i class="icon_bag_alt"></i>
-                                    <span th:text="${#numbers.formatDecimal(quantity,2,0,'COMMA')}">2</span>
+                                    <span>3</span>
                                 </a>
                                 <div class="cart-hover">
                                     <div class="select-items">
@@ -167,8 +160,8 @@
                 </div>
                 <nav class="nav-menu mobile-menu">
                     <ul>
-                        <li><a th:href="@{/}">Home</a></li>
-                        <li><a th:href="@{/productList}">Shop</a></li>
+                        <li><a href="./index.html">Home</a></li>
+                        <li><a href="./shop.html">Shop</a></li>
                         <li><a href="#">Collection</a>
                             <ul class="dropdown">
                                 <li><a href="#">Men's</a></li>
@@ -176,15 +169,16 @@
                                 <li><a href="#">Kid's</a></li>
                             </ul>
                         </li>
-                        <li><a th:href="@{/blog}">Blog</a></li>
-                        <li><a href="./contact.html">Contact</a></li>
+                        <li><a href="./blog.html">Blog</a></li>
+                        <li><a href="./check-out.html">Contact</a></li>
                         <li><a href="#">Pages</a>
                             <ul class="dropdown">
-                                <li><a th:href="@{/blogDetail}">Blog Details</a></li>
-                                <li><a th:href="@{/shoppingCart}">Shopping Cart</a></li>
-                                <li><a th:href="@{/shoppingCartConfirmation}">Checkout</a></li>
-                                <li><a th:href="@{/register}">Register</a></li>
-                                <li><a th:href="@{/login}">Login</a></li>
+                                <li><a href="./blog-details.html">Blog Details</a></li>
+                                <li><a href="./shopping-cart.html">Shopping Cart</a></li>
+                                <li><a href="./check-out.html">Checkout</a></li>
+                                <li><a href="./faq.html">Faq</a></li>
+                                <li><a href="./register.html">Register</a></li>
+                                <li><a href="./login.html">Login</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -193,294 +187,141 @@
             </div>
         </div>
     </header>
-    <!-- Header End --!>
-	
-	 <!-- Filter Begin -->
-	<div class="col-lg-3 col-md-6 col-sm-8 order-2 order-lg-1 produts-sidebar-filter" th:fragment = "filter">
-        <div class="filter-widget">
-            <h4 class="fw-title">Categories</h4>
-            <ul class="filter-catagories">
-                <li><a href="#">Men</a></li>
-                <li><a href="#">Women</a></li>
-                <li><a href="#">Kids</a></li>
-            </ul>
-        </div>
-        <div class="filter-widget">
-            <h4 class="fw-title">Brand</h4>
-            <div class="fw-brand-check">
-                <div class="bc-item">
-                    <label for="bc-calvin">
-                        Calvin Klein
-                        <input type="checkbox" id="bc-calvin">
-                        <span class="checkmark"></span>
-                    </label>
-                </div>
-                <div class="bc-item">
-                    <label for="bc-diesel">
-                        Diesel
-                        <input type="checkbox" id="bc-diesel">
-                        <span class="checkmark"></span>
-                    </label>
-                </div>
-                <div class="bc-item">
-                    <label for="bc-polo">
-                        Polo
-                        <input type="checkbox" id="bc-polo">
-                        <span class="checkmark"></span>
-                    </label>
-                </div>
-                <div class="bc-item">
-                    <label for="bc-tommy">
-                        Tommy Hilfiger
-                        <input type="checkbox" id="bc-tommy">
-                        <span class="checkmark"></span>
-                    </label>
-                </div>
-            </div>
-        </div>
-        <div class="filter-widget">
-            <h4 class="fw-title">Price</h4>
-            <div class="filter-range-wrap">
-                <div class="range-slider">
-                    <div class="price-input">
-                        <input type="text" id="minamount">
-                        <input type="text" id="maxamount">
-                    </div>
-                </div>
-                <div class="price-range ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"
-                    data-min="33" data-max="98">
-                    <div class="ui-slider-range ui-corner-all ui-widget-header"></div>
-                    <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
-                    <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
-                </div>
-            </div>
-            <a href="#" class="filter-btn">Filter</a>
-        </div>
-        <div class="filter-widget">
-            <h4 class="fw-title">Color</h4>
-            <div class="fw-color-choose">
-                <div class="cs-item">
-                    <input type="radio" id="cs-black">
-                    <label class="cs-black" for="cs-black">Black</label>
-                </div>
-                <div class="cs-item">
-                    <input type="radio" id="cs-violet">
-                    <label class="cs-violet" for="cs-violet">Violet</label>
-                </div>
-                <div class="cs-item">
-                    <input type="radio" id="cs-blue">
-                    <label class="cs-blue" for="cs-blue">Blue</label>
-                </div>
-                <div class="cs-item">
-                    <input type="radio" id="cs-yellow">
-                    <label class="cs-yellow" for="cs-yellow">Yellow</label>
-                </div>
-                <div class="cs-item">
-                    <input type="radio" id="cs-red">
-                    <label class="cs-red" for="cs-red">Red</label>
-                </div>
-                <div class="cs-item">
-                    <input type="radio" id="cs-green">
-                    <label class="cs-green" for="cs-green">Green</label>
-                </div>
-            </div>
-        </div>
-        <div class="filter-widget">
-            <h4 class="fw-title">Size</h4>
-            <div class="fw-size-choose">
-                <div class="sc-item">
-                    <input type="radio" id="s-size">
-                    <label for="s-size">s</label>
-                </div>
-                <div class="sc-item">
-                    <input type="radio" id="m-size">
-                    <label for="m-size">m</label>
-                </div>
-                <div class="sc-item">
-                    <input type="radio" id="l-size">
-                    <label for="l-size">l</label>
-                </div>
-                <div class="sc-item">
-                    <input type="radio" id="xs-size">
-                    <label for="xs-size">xs</label>
-                </div>
-            </div>
-        </div>
-        <div class="filter-widget">
-            <h4 class="fw-title">Tags</h4>
-            <div class="fw-tags">
-                <a href="#">Towel</a>
-                <a href="#">Shoes</a>
-                <a href="#">Coat</a>
-                <a href="#">Dresses</a>
-                <a href="#">Trousers</a>
-                <a href="#">Men's hats</a>
-                <a href="#">Backpack</a>
-            </div>
-        </div>
-    </div>
-	 <!-- Fillter End -->
-	
-    <!-- Breadcrumb Section Begin -->
-    <div class="breacrumb-section" th:fragment="breacrumb-section-login">
+    <!-- Header End -->
+
+    <!-- Blog Details Section Begin -->
+    <section class="blog-details spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="breadcrumb-text">
-                        <a href="#"><i class="fa fa-home"></i> Home</a>
-                        <span>Login</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="breacrumb-section" th:fragment="breacrumb-section-register">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="breadcrumb-text">
-                        <a href="#"><i class="fa fa-home"></i> Home</a>
-                        <span>Register</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Breadcrumb Form Section Begin info user -->
-    <div class="breacrumb-section" th:fragment="breacrumb-section-info">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="breadcrumb-text">
-                        <a href="#"><i class="fa fa-home"></i> Home</a>
-                        <span>Info User</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Breadcrumb Section End user -->
-    <!-- Breadcrumb Form Section Begin shop -->
-    
-    <div class="breacrumb-section" th:fragment="breacrumb-section-shop">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="breadcrumb-text">
-                        <a href="#"><i class="fa fa-home"></i> Home</a>
-                        <span>Shop</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Breadcrumb Section End shop -->
-    <!-- Breadcrumb Form Section Begin detail -->
-    
-    <div class="breacrumb-section" th:fragment="breacrumb-section-detail">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="breadcrumb-text product-more">
-                        <a href="./home.html"><i class="fa fa-home"></i> Home</a>
-                        <a href="./shop.html">Shop</a>
-                        <span>Detail</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-	<!-- Breadcrumb Section End detail -->
-	
-	<!-- Breadcrumb Section Begin shoppingcart -->
-	<div class="breacrumb-section" th:fragment="breacrumb-section-shoppingcart">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="breadcrumb-text product-more">
-                        <a href="./home.html"><i class="fa fa-home"></i> Home</a>
-                        <a href="./shop.html">Shop</a>
-                        <span>Shopping Cart</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-	<!-- Breadcrumb Section End shoppingcart -->
-	
-	<!-- Breadcrumb Section Begin checkout -->
-    <div class="breacrumb-section-checkout" th:fragment="breacrumb-section-checkout">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="breadcrumb-text product-more">
-                        <a href="./index.html"><i class="fa fa-home"></i> Home</a>
-                        <a href="./shop.html">Shop</a>
-                        <span>Check Out</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Breadcrumb Section Begin checkout -->
-	
-	<!-- Breadcrumb Section Begin -->
-    <div class="breacrumb-section-thank-you" th:fragment="breacrumb-section-thank-you">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="breadcrumb-text">
-                        <a href="#"><i class="fa fa-home"></i> Home</a>
-                        <span>Thank You</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Breadcrumb Section Begin -->
-	
-    <!-- Register Section Begin -->
-    <div class="register-login-section spad">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 offset-lg-3">
-                    <div class="login-form">
-                        <h2>Login</h2>
-                        <form action="#">
-                            <div class="group-input">
-                                <label for="username">Username or email address *</label>
-                                <input type="text" id="username">
-                            </div>
-                            <div class="group-input">
-                                <label for="pass">Password *</label>
-                                <input type="text" id="pass">
-                            </div>
-                            <div class="group-input gi-check">
-                                <div class="gi-more">
-                                    <label for="save-pass">
-                                        Save Password
-                                        <input type="checkbox" id="save-pass">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                    <a href="#" class="forget-pass">Forget your Password</a>
+                    <div class="blog-details-inner">
+                        <div class="blog-detail-title">
+                            <h2>The Personality Trait That Makes People Happier</h2>
+                            <p>travel <span>- May 19, 2019</span></p>
+                        </div>
+                        <div class="blog-large-pic">
+                            <img src="img/blog/blog-detail.jpg" alt="">
+                        </div>
+                        <div class="blog-detail-desc">
+                            <p>psum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+                                labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                                laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure Lorem ipsum dolor sit
+                                amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
+                                magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                                aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate.
+                            </p>
+                        </div>
+                        <div class="blog-quote">
+                            <p>“ Technology is nothing. What's important is that you have a faith in people, that
+                                they're basically good and smart, and if you give them tools, they'll do wonderful
+                                things with them.” <span>- Steven Jobs</span></p>
+                        </div>
+                        <div class="blog-more">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <img src="img/blog/blog-detail-1.jpg" alt="">
+                                </div>
+                                <div class="col-sm-4">
+                                    <img src="img/blog/blog-detail-2.jpg" alt="">
+                                </div>
+                                <div class="col-sm-4">
+                                    <img src="img/blog/blog-detail-3.jpg" alt="">
                                 </div>
                             </div>
-                            <button type="submit" class="site-btn login-btn">Sign In</button>
-                        </form>
-                        <div class="switch-login">
-                            <a href="./register.html" class="or-login">Or Create An Account</a>
+                        </div>
+                        <p>Sum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
+                            et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                            nisi ut aliquip ex ea commodo consequat. Duis aute irure Lorem ipsum dolor sit amet,
+                            consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+                            aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                            ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate.</p>
+                        <div class="tag-share">
+                            <div class="details-tag">
+                                <ul>
+                                    <li><i class="fa fa-tags"></i></li>
+                                    <li>Travel</li>
+                                    <li>Beauty</li>
+                                    <li>Fashion</li>
+                                </ul>
+                            </div>
+                            <div class="blog-share">
+                                <span>Share:</span>
+                                <div class="social-links">
+                                    <a href="#"><i class="fa fa-facebook"></i></a>
+                                    <a href="#"><i class="fa fa-twitter"></i></a>
+                                    <a href="#"><i class="fa fa-google-plus"></i></a>
+                                    <a href="#"><i class="fa fa-instagram"></i></a>
+                                    <a href="#"><i class="fa fa-youtube-play"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="blog-post">
+                            <div class="row">
+                                <div class="col-lg-5 col-md-6">
+                                    <a href="#" class="prev-blog">
+                                        <div class="pb-pic">
+                                            <i class="ti-arrow-left"></i>
+                                            <img src="img/blog/prev-blog.png" alt="">
+                                        </div>
+                                        <div class="pb-text">
+                                            <span>Previous Post:</span>
+                                            <h5>The Personality Trait That Makes People Happier</h5>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-lg-5 offset-lg-2 col-md-6">
+                                    <a href="#" class="next-blog">
+                                        <div class="nb-pic">
+                                            <img src="img/blog/next-blog.png" alt="">
+                                            <i class="ti-arrow-right"></i>
+                                        </div>
+                                        <div class="nb-text">
+                                            <span>Next Post:</span>
+                                            <h5>The Personality Trait That Makes People Happier</h5>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="posted-by">
+                            <div class="pb-pic">
+                                <img src="img/blog/post-by.png" alt="">
+                            </div>
+                            <div class="pb-text">
+                                <a href="#">
+                                    <h5>Shane Lynch</h5>
+                                </a>
+                                <p>Aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+                                    velit esse cillum bore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                                    amodo</p>
+                            </div>
+                        </div>
+                        <div class="leave-comment">
+                            <h4>Leave A Comment</h4>
+                            <form action="#" class="comment-form">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <input type="text" placeholder="Name">
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <input type="text" placeholder="Email">
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <textarea placeholder="Messages"></textarea>
+                                        <button type="submit" class="site-btn">Send message</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Register Form Section End -->
+    </section>
+    <!-- Blog Details Section End -->
 
     <!-- Partner Logo Section Begin -->
-    <div class="partner-logo" th:fragment="logo">
+    <div class="partner-logo">
         <div class="container">
             <div class="logo-carousel owl-carousel">
                 <div class="logo-item">
@@ -514,7 +355,7 @@
     <!-- Partner Logo Section End -->
 
     <!-- Footer Section Begin -->
-    <footer class="footer-section" th:fragment="footer">
+    <footer class="footer-section">
         <div class="container">
             <div class="row">
                 <div class="col-lg-3">
@@ -585,7 +426,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
                 </div>
             </div>
         </div>
-    
+    </footer>
     <!-- Footer Section End -->
 
     <!-- Js Plugins -->
@@ -599,8 +440,6 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <script src="js/jquery.slicknav.js"></script>
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/main.js"></script>
-   
-    </footer>
 </body>
 
 </html>

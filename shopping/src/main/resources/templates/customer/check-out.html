@@ -49,7 +49,7 @@
                             <div class="proceed-checkout">
                                 <ul>
                                     <li class="subtotal">Quantity<span th:text="${#numbers.formatDecimal(cartInfo.quantityTotal,2,0,'COMMA')}"></span></li>
-                                    <li class="cart-total">Total <span th:text="${#numbers.formatDecimal(cartInfo.amountTotal,2,3,'COMMA')}"></span></li>
+                                    <li class="cart-total">Total: <span th:text="${#numbers.formatDecimal(cartInfo.amountTotal,2,3,'COMMA')}"></span></li>
                                 </ul>
                            </div>
                             
@@ -85,7 +85,7 @@
                                     <li class="fw-normal">
                                    		<p th:text="${cartLineInfo.quantity}"></p>
                                     </li>
-                                    <li class="subtotal">Subtotal<span th:text="${#numbers.formatDecimal(cartLineInfo.productInfo.price,2,3,'COMMA')}"></span></li>
+                                    <li class="subtotal">Subtotal<span th:text="${#numbers.formatDecimal(cartLineInfo.amount,2,3,'COMMA')}"></span></li>
                                     
                                 </ul>
                                 

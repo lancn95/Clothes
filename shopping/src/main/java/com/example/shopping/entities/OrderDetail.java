@@ -31,7 +31,7 @@ public class OrderDetail implements Serializable{
     private Product product;
  
     @Column(name = "Quanity", nullable = false)
-    private int quanity;
+    private int quantity;
  
     @Column(name = "Price", nullable = false)
     private double price;
@@ -63,12 +63,13 @@ public class OrderDetail implements Serializable{
 		this.product = product;
 	}
 
-	public int getQuanity() {
-		return quanity;
+
+	public int getQuantity() {
+		return quantity;
 	}
 
-	public void setQuanity(int quanity) {
-		this.quanity = quanity;
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
 	}
 
 	public double getPrice() {

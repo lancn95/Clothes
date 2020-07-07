@@ -217,6 +217,7 @@ public class MainController {
 			orderServiceImpl.saveOrder(cartInfo);
 			
 		}catch(Exception e) {
+			e.printStackTrace();
 			return "redirect:/shoppingCartConfirmation";
 		}
 		
@@ -232,13 +233,13 @@ public class MainController {
 	@RequestMapping(value = "/shoppingCartFinalize", method = RequestMethod.GET)
 	public String shoppingCartFinalize(HttpServletRequest request, Model model) {
 		
-		CartInfo lastOderCart = Utils.getLastOrderCartInSession(request);
+		CartInfo lastOrderCart = Utils.getLastOrderCartInSession(request);
 		
-		if(lastOderCart == null) {
+		if(lastOrderCart == null) {
 			return "redirect:/shoppingCartConfirmation";
 		}
 		
-		model.addAttribute("lastOderCart", lastOderCart);
+		model.addAttribute("lastOrderCart", lastOrderCart);
 		
 		return "customer/shoppingCartFinalize";
 	}
@@ -388,5 +389,17 @@ public class MainController {
 			response.getOutputStream().write(product.getImage());
 		}
 		response.getOutputStream().close();
+	}
+	
+	@RequestMapping(value = { "/blog" }, method = RequestMethod.GET)
+	public String blog(HttpServletRequest request, HttpServletResponse response, Model model) {
+		
+		return "customer/blog";
+	}
+	
+	@RequestMapping(value = { "/blogDetail" }, method = RequestMethod.GET)
+	public String blogDetail(HttpServletRequest request, HttpServletResponse response, Model model) {
+		
+		return "customer/blog-details";
 	}
 }
