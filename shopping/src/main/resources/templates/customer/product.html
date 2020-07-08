@@ -61,8 +61,10 @@
                                 </div>
                                 <div class="pd-desc">
                                     <p th:text="${product.description}"></p>
-                                    <h4 th:text="${#numbers.formatDecimal(product.price,2,3,'COMMA')}">
-                                    	<span>629.99</span>
+                                    <h3 th:text="${#numbers.formatDecimal(product.price,2,3,'COMMA')}"></h3>
+                                    <h4>
+                                    	<span th:text="${#numbers.formatDecimal(product.price,2,3,'COMMA')}"></span>
+                                    	VNĐ
                                     </h4>
                                     
                                 </div>
@@ -102,10 +104,12 @@
                                     </div>
                                 </div>
                                 <div class="quantity">
+                                
                                     <div class="pro-qty">
-                                        <input type="text" value="1">
+                                        <input type="number" value="1">
                                     </div>
-                                    <a href="#" class="primary-btn pd-cart">Add To Cart</a>
+                                    <a th:href="@{|/buyProduct?code=${product.code}|}" class="primary-btn pd-cart">Add To Cart</a>
+                                
                                 </div>
                                 <ul class="pd-tags">
                                     <li><span>CATEGORIES</span>: More Accessories, Wallets & Cases</li>

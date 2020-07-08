@@ -3,11 +3,13 @@ package com.example.shopping.controller;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -27,6 +29,9 @@ import com.example.shopping.form.CustomerForm;
 import com.example.shopping.model.CartInfo;
 import com.example.shopping.model.CustomerInfo;
 import com.example.shopping.model.ProductInfo;
+import com.example.shopping.model.UserInfo;
+import com.example.shopping.service.EmailService;
+import com.example.shopping.service.Impl.EmailServiceImpl;
 import com.example.shopping.service.Impl.OrderServiceImpl;
 import com.example.shopping.service.Impl.ProductServiceImpl;
 import com.example.shopping.service.Impl.UserServiceImpl;
@@ -44,6 +49,12 @@ public class MainController {
 	
 	@Autowired
 	private OrderServiceImpl orderServiceImpl;
+	
+	@Autowired
+	private EmailServiceImpl emailServiceImpl;
+	
+	@Autowired
+	private EmailService emailService;
 	
 	@InitBinder
 	public void myInitBinder(WebDataBinder dataBinder) {
@@ -73,7 +84,94 @@ public class MainController {
 		model.addAttribute("message", "This is welcome page!");
 		return "customer/index";
 	}
-
+	
+	// display forgotPassword page
+	@RequestMapping(value = "/forgot-password", method = RequestMethod.GET)
+	public String forgotPassword(Model model, AppUser user) {
+		model.addAttribute("user", user);
+		
+		return "customer/forgotPassword";
+	}
+	
+	// Process form submission from forgotPassword page
+	@RequestMapping(value = "/forgot-password", method = RequestMethod.POST)
+	public String processForgotPasswordForm(@ModelAttribute AppUser user, HttpServletRequest request, Model model) {
+		System.out.println("Email user: " + user.getEmail());
+		// Lookup user in database by e-mail
+		 AppUser u = emailServiceImpl.findByEmail(user.getEmail());
+		 
+		 System.out.println("Name user: " + u.getUserName());
+		 if(u == null) {
+			 model.addAttribute("errorMessage", "Địa chỉ email không tồn tại");
+			 
+			 return "redirect:/forgot-password";
+		 }else {
+			// Generate random 36-character string token for reset password 
+			 String resetToken = UUID.randomUUID().toString();
+			 u.setResetToken(resetToken);
+			 
+			// Save token to database
+			 userServiceImpl.saveToken(resetToken, user.getEmail());
+			 
+			 String appUrl = request.getScheme() + "://" + request.getServerName();
+			 
+			 //Email message
+			 SimpleMailMessage passwordResetEmail = new SimpleMailMessage();
+			passwordResetEmail.setFrom("support@demo.com");
+			passwordResetEmail.setTo(user.getEmail());
+			passwordResetEmail.setSubject("Password Reset Request");
+			/*
+			 * passwordResetEmail.setText("To reset your password, click the link below:\n"
+			 * + appUrl + "/reset?token=" + u.getResetToken());
+			 */
+			passwordResetEmail.setText("To reset your password, click the link below:\n" + "http://localhost:8080"
+					+ "/reset?token=" + u.getResetToken());
+			
+			emailService.sendEmail(passwordResetEmail);
+			// Add success message to view
+			model.addAttribute("successMessage", "A password reset link has been sent to " + user.getEmail());
+			
+		 }
+		
+		 
+		return "customer/forgotPassword";
+	}
+	
+	@RequestMapping(value = "/reset", method= RequestMethod.GET)
+	public String displayResetPassword(@RequestParam("token") String resetToken, Model model) {
+		AppUser user = emailService.findByResetToken(resetToken);
+		
+		if(user == null) {
+			model.addAttribute("errorMessage", "This is invalid password reset link");
+		}else {
+			UserInfo userInfo = new UserInfo(user);
+			model.addAttribute("userInfo", userInfo);
+		}
+		
+		return "customer/resetPassword";
+	}
+	
+	@RequestMapping(value = "/reset", method = RequestMethod.POST)
+	public String saveNewPassword(@ModelAttribute UserInfo userInfo) {
+		System.out.println("reset password from user: " + userInfo.getEncrytedPassword());
+		String resetToken = userInfo.getResetToken();
+		
+		AppUser user = emailService.findByResetToken(resetToken);
+		System.out.println("token: " + user.getResetToken());
+		
+		System.out.println("token userinfo: " + userInfo.getResetToken());
+		//update password by token 
+		
+		userServiceImpl.updatePassword(userInfo.getEncrytedPassword(), userInfo.getResetToken());
+		
+		//update new token
+		String newToken = UUID.randomUUID().toString();
+		userServiceImpl.saveToken(newToken, user.getEmail());
+		
+		return "redirect:/login";
+	}
+	
+	
 	@RequestMapping(value = "/productList", method = RequestMethod.GET)
 	public String listProductHandler(HttpServletRequest request, Model model) {
 		List<Product> products = productServiceImpl.findAll();
@@ -83,6 +181,7 @@ public class MainController {
 		if (mycart != null) {
 			System.out.println("so luong trong gio: " + mycart.getQuantityTotal());
 			model.addAttribute("quantity", mycart.getQuantityTotal());
+			model.addAttribute("total", mycart.getAmountTotal());
 		}
 		return "customer/shop";
 	}
@@ -98,9 +197,12 @@ public class MainController {
 	}
 
 	@RequestMapping(value = "/buyProduct", method = RequestMethod.GET)
-	public String buyProduct(HttpServletRequest request, Model model, @RequestParam("code") String code) {
+	public String buyProduct(HttpServletRequest request, Model model,
+									@RequestParam("code") String code
+									) {
 		Product product = null;
-
+		
+		
 		if (code != null && code.length() > 0) {
 			product = productServiceImpl.findProduct(code);
 		}
@@ -109,8 +211,9 @@ public class MainController {
 			CartInfo cartInfo = Utils.getInfoCartInSession(request);
 
 			ProductInfo productInfo = new ProductInfo(product);
-
+			
 			cartInfo.addProduct(productInfo, 1);
+			
 		}
 
 		return "redirect:/shoppingCart";
@@ -271,7 +374,7 @@ public class MainController {
 					return "customer/register";
 				} else {
 					if (userServiceImpl.isDuplicateUser(model, appUser.getUserName(), u.getUserName()) == true) {
-						model.addAttribute("duplicate_name");
+						model.addAttribute("duplicate_name","Tên này đã được sử dụng!");
 						return "customer/register";
 					}
 

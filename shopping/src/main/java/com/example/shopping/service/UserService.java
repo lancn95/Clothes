@@ -23,4 +23,6 @@ public interface UserService {
 			 String town, String email ,String phone, String userName);
 	
 	boolean isDuplicateUser(Model model,String s1, String s2);
+	
+	void saveToken (String token, String email);
 }

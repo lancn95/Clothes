@@ -74,7 +74,15 @@ public class UserServiceImpl implements UserService{
 		return false;
 	}
 
-	
+	@Override
+	public void saveToken(String token, String email) {
+		appUserDAO.saveToken(token, email);
+		
+	}
+
+	public void updatePassword(String password, String token) {
+		appUserDAO.updatePasswordByToken(password, token);
+	}
 
 	
 	

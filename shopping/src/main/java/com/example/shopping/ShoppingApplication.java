@@ -15,6 +15,8 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
@@ -43,6 +45,7 @@ public class ShoppingApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ShoppingApplication.class, args);
 	}
+		
 	
 	//cấu hình các Spring BEAN cần thiết cho Hibernate
 	

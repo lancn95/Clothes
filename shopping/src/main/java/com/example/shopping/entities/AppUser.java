@@ -43,6 +43,8 @@ public class AppUser {
 	@Column(name = "phone", length = 15)
 	private String phone;
 	
+	@Column(name = "Reset_Token", length = 36)
+	private String resetToken;
 	
 	public Long getUserId() {
 		return userId;
@@ -122,6 +124,14 @@ public class AppUser {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	
+	public String getResetToken() {
+		return resetToken;
+	}
+
+	public void setResetToken(String resetToken) {
+		this.resetToken = resetToken;
 	}
 
 	@Override

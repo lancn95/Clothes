@@ -64,7 +64,21 @@ public class AppUserDAO {
 			e.printStackTrace();
 		}
 	}
-
+	
+	public void saveToken(String token, String email) {
+		try 
+		{
+			// nativeQuery : query theo table name,field ở trong Database
+			entityManager.createNativeQuery(
+					"UPDATE App_User SET Reset_Token = ? WHERE Email = ?")
+					.setParameter(1, token)
+					.setParameter(2, email)
+					.executeUpdate();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void updateUserByName(String firstName, String lastName, String street, String town, String email,
 			String phone, String userName) {
 		try {
@@ -80,6 +94,20 @@ public class AppUserDAO {
 					.setParameter(7, userName)
 					.executeUpdate();
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void updatePasswordByToken(String password, String token) {
+		try 
+		{
+			// nativeQuery : query theo table name,field ở trong Database
+			entityManager.createNativeQuery(
+					"UPDATE App_User SET Encryted_Password = ? WHERE Reset_Token = ?")
+					.setParameter(1, password)
+					.setParameter(2, token)
+					.executeUpdate();
+		}catch(Exception e) {
 			e.printStackTrace();
 		}
 	}

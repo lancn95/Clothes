@@ -42,7 +42,7 @@
                     </div>
                     <div class="phone-service">
                         <i class=" fa fa-phone"></i>
-                        +65 11.188.888
+                        +0374715013
                     </div>
                 </div>
                 <div class="ht-right">
@@ -75,7 +75,7 @@
                 <div class="row">
                     <div class="col-lg-2 col-md-2">
                         <div class="logo">
-                            <a href="./index.html">
+                            <a th:href="@{/}">
                                 <img src="img/logo.png" alt="">
                             </a>
                         </div>
@@ -91,14 +91,16 @@
                     </div>
                     <div class="col-lg-3 text-right col-lg-3">
                         <ul class="nav-right">
-                            <li class="heart-icon"><a href="#">
+<!--                             <li class="heart-icon"><a href="#">
                                     <i class="icon_heart_alt"></i>
                                     <span>1</span>
                                 </a>
-                            </li>
-                            <li class="cart-icon"><a href="#">
+                            </li> -->
+                            <li class="cart-icon"><a th:href="@{/shoppingCart}">
                                     <i class="icon_bag_alt"></i>
-                                    <span th:text="${#numbers.formatDecimal(quantity,2,0,'COMMA')}">2</span>
+                                    <th:block th:if=${quantity}>
+                                    	<span th:text="${#numbers.formatDecimal(quantity,2,0,'COMMA')}"></span>
+                                    </th:block>
                                 </a>
                                 <div class="cart-hover">
                                     <div class="select-items">
@@ -133,15 +135,19 @@
                                     </div>
                                     <div class="select-total">
                                         <span>total:</span>
-                                        <h5>$120.00</h5>
+                                        <h5><span th:text="${#numbers.formatDecimal(total,2,3,'COMMA')}"></span>VND</h5>
                                     </div>
                                     <div class="select-button">
-                                        <a href="#" class="primary-btn view-card">VIEW CARD</a>
-                                        <a href="#" class="primary-btn checkout-btn">CHECK OUT</a>
+                                        <a th:href="@{/shoppingCart}" class="primary-btn view-card">VIEW CARD</a>
+                                        <a th:href="@{/shoppingCartCustomer}" class="primary-btn checkout-btn">CHECK OUT</a>
                                     </div>
                                 </div>
                             </li>
-                            <li class="cart-price">$150.00</li>
+                            <li class="cart-price">
+                            <th:block th:if=${total}>
+                            	<span th:text="${#numbers.formatDecimal(total,2,3,'COMMA')}"></span> VND
+                            </th:block>	
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -327,7 +333,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb-text">
-                        <a href="#"><i class="fa fa-home"></i> Home</a>
+                        <a th:href="@{/}"><i class="fa fa-home"></i> Home</a>
                         <span>Login</span>
                     </div>
                 </div>
@@ -340,7 +346,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb-text">
-                        <a href="#"><i class="fa fa-home"></i> Home</a>
+                        <a th:href="@{/}"><i class="fa fa-home"></i> Home</a>
                         <span>Register</span>
                     </div>
                 </div>
@@ -354,7 +360,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb-text">
-                        <a href="#"><i class="fa fa-home"></i> Home</a>
+                        <a th:href="@{/}"><i class="fa fa-home"></i> Home</a>
                         <span>Info User</span>
                     </div>
                 </div>
@@ -369,7 +375,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb-text">
-                        <a href="#"><i class="fa fa-home"></i> Home</a>
+                        <a th:href="@{/}"><i class="fa fa-home"></i> Home</a>
                         <span>Shop</span>
                     </div>
                 </div>
@@ -384,8 +390,8 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb-text product-more">
-                        <a href="./home.html"><i class="fa fa-home"></i> Home</a>
-                        <a href="./shop.html">Shop</a>
+                        <a th:href="@{/}"><i class="fa fa-home"></i> Home</a>
+                        <a th:href="@{/productList}">Shop</a>
                         <span>Detail</span>
                     </div>
                 </div>
@@ -400,8 +406,8 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb-text product-more">
-                        <a href="./home.html"><i class="fa fa-home"></i> Home</a>
-                        <a href="./shop.html">Shop</a>
+                        <a th:href="@{/}"><i class="fa fa-home"></i> Home</a>
+                        <a th:href="@{/productList}">Shop</a>
                         <span>Shopping Cart</span>
                     </div>
                 </div>
@@ -416,8 +422,8 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb-text product-more">
-                        <a href="./index.html"><i class="fa fa-home"></i> Home</a>
-                        <a href="./shop.html">Shop</a>
+                        <a th:href="@{/}"><i class="fa fa-home"></i> Home</a>
+                        <a th:href="@{/productList}">Shop</a>
                         <span>Check Out</span>
                     </div>
                 </div>
@@ -432,7 +438,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb-text">
-                        <a href="#"><i class="fa fa-home"></i> Home</a>
+                        <a th:href="@{/}"><i class="fa fa-home"></i> Home</a>
                         <span>Thank You</span>
                     </div>
                 </div>
