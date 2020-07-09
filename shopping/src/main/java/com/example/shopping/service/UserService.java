@@ -25,4 +25,8 @@ public interface UserService {
 	boolean isDuplicateUser(Model model,String s1, String s2);
 	
 	void saveToken (String token, String email);
+	
+	public void addRoleForUser(Long userId);
+	
+	public Long getUserIDMax();
 }

@@ -27,7 +27,7 @@ public class ProductDAO {
 
 	public List<Product> findAll() {
 		try {
-			String sql = "select p from " + Product.class.getName() + " p ";
+			String sql = "select p from " + Product.class.getName() + " p " + " order by p.createDate desc ";
 			Session session = this.sessionFactory.getCurrentSession();
 			Query<Product> query = session.createQuery(sql, Product.class);
 			return query.getResultList();

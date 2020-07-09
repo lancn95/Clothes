@@ -8,15 +8,20 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import com.example.shopping.dao.AppUserDAO;
+import com.example.shopping.dao.UserRoleDAO;
 import com.example.shopping.entities.AppUser;
 import com.example.shopping.service.UserService;
 import com.example.shopping.utils.EncrytedPasswordUtils;
+import com.example.shopping.utils.Utils;
 
 @Service
 public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private AppUserDAO appUserDAO;
+	
+	@Autowired
+	private UserRoleDAO userRoleDAO;
 	
 	@Override
 	public List<AppUser> findAll() {
@@ -35,7 +40,8 @@ public class UserServiceImpl implements UserService{
 	public void createUser(AppUser appUser) {
 		AppUser user = new AppUser();
 		String passwordEncode = EncrytedPasswordUtils.encrytePassword(appUser.getEncrytedPassword());
-		user.setUserId(3L);
+		Long UserId = this.getUserIDMax() + 1L;
+		user.setUserId(UserId);
 		user.setUserName(appUser.getUserName());
 		user.setEmail(appUser.getEmail());
 		user.setEncrytedPassword(passwordEncode);
@@ -81,7 +87,20 @@ public class UserServiceImpl implements UserService{
 	}
 
 	public void updatePassword(String password, String token) {
-		appUserDAO.updatePasswordByToken(password, token);
+	String passwordBrcypt = EncrytedPasswordUtils.encrytePassword(password);
+		appUserDAO.updatePasswordByToken(passwordBrcypt, token);
+	}
+
+	@Override
+	public void addRoleForUser(Long userId) {
+		userRoleDAO.addRoleForUser(userId);
+		
+	}
+
+	@Override
+	public Long getUserIDMax() {
+		
+		return appUserDAO.getUserIDMax();
 	}
 
 	

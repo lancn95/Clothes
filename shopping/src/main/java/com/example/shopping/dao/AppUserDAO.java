@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.shopping.entities.AppUser;
+import com.example.shopping.entities.Order;
 
 @Transactional
 @Repository
@@ -110,5 +111,17 @@ public class AppUserDAO {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public Long getUserIDMax() {
+		String sql = "Select Max(u.userId) from " + AppUser.class.getName() + " u ";
+		Session session = this.sessionFactory.getCurrentSession();
+		Query query = session.createQuery(sql, Long.class);
+
+		Long value = (Long) query.getSingleResult();
+		if (value == null) {
+			return (long) 0;
+		}
+		return  (Long) value;
 	}
 }

@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head th:replace = "admin/common :: head"></head>
     <body class="sb-nav-fixed">
-        <nav th:replace="admin/common :: nav"></nav>
+        
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav" th:replace = "admin/common :: layoutSidenav_nav"></div>
             <div id="layoutSidenav_content">
@@ -14,11 +14,11 @@
                         </ol>
                         <div class="row">
                         
-                           <th:block th:if="${#lists.isEmpty(products)}">
+                           <th:block th:if="${#lists.isEmpty(products.pageList)}">
 								<h3>Không có sản phẩm nào!</h3>
 							</th:block>
 							
-							<th:block th:unless="${#lists.isEmpty(products)}">
+							<th:block th:unless="${#lists.isEmpty(products.pageList)}">
 								<table class="table table-bordered table-hover">
 									<thead>
 										<tr>
@@ -27,12 +27,13 @@
 											<th>Code</th>
 											<th>Tên sản phẩm</th>
 											<th>Mô tả</th>
-											<th>Sửa</th>
+											<th>Ngày tạo</th>
+											<th>Sửa <span class="glyphicon glyphicon-pencil"></span></th>
 											<th>Xóa</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr th:each="product, iterStat : ${products}">
+										<tr th:each="product, iterStat : ${products.pageList}">
 											<td th:text="${iterStat.count}"></td>
 											<td>
 											<img class="product-image" style="width:100px"
@@ -40,6 +41,7 @@
 											<td th:text="${product.code}"></td>
 											<td th:text="${product.name}"></td>
 											<td th:text="${product.description}"></td>
+											<td th:text="${#dates.format(product.createDate,'dd-MM-yyyy HH:mm')}"></td>
 											<td><a
 												th:href="@{|/admin/product-update?code=${product.code}|}"> <span
 													class="glyphicon glyphicon-pencil">Sửa</span>
@@ -52,8 +54,43 @@
 										</tr>
 									</tbody>
 								</table>
+								
+								
 							</th:block> 
                             
+                        </div>
+                        <div class="row">
+                        	<nav aria-label="Page navigation example">
+				                <ul class="pagination">
+									<li
+										th:class="${currentIndex == 1}? 'page-item disabled' : 'page-item'">
+										<a class="page-link" th:href="@{/admin/product}">First</a>
+									</li>
+									<li
+										th:class="${currentIndex == 1}? 'page-item disabled': 'page-item' ">
+										<a class="page-link" aria-label="Previous"
+										th:href="@{|${baseUrl}${currentIndex - 1}|}"
+										title='Go to previous page'><span aria-hidden="true">«</span>
+											<span class="sr-only">Previous</span></a>
+									</li>
+									<li th:each="item : ${#numbers.sequence(beginIndex,endIndex)}"
+										th:class="${item == currentIndex ? 'page-item active' :'page-item' }">
+										<a class="page-link" th:href="@{|${baseUrl}${item}|}"> <span
+											th:text='${item}'>1</span>
+									</a>
+									</li>
+									<li
+										th:class="${currentIndex == totalPageCount}? 'page-item disabled': 'page-item'">
+										<a class="page-link" aria-label="Next"
+										th:href="@{|${baseUrl}${currentIndex + 1}|}" title='Go to next page'><span
+											aria-hidden="true">»</span> <span class="sr-only">Next</span></a>
+									</li>
+									<li
+										th:class="${currentIndex == totalPageCount}? 'page-item disabled':'page-item'">
+										<a class="page-link" th:href="@{|${baseUrl}${totalPageCount}|}">Last</a>
+									</li>
+								</ul>
+							</nav>
                         </div>
                     </div>
                 </main>
