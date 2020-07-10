@@ -95,24 +95,35 @@
                                             <a class="nav-link" href="500.html">500 Page</a>
                                         </nav>
                                     </div>
+                                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseCategory" aria-expanded="false" aria-controls="pagesCollapseCategory">
+                                        Quản lý danh mục sản phẩm
+                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                    </a>
+                                    <div class="collapse" id="pagesCollapseCategory" aria-labelledby="headingOne" data-parent="#sidenavAccordionPages">
+                                        <nav class="sb-sidenav-menu-nested nav">
+                                            <a class="nav-link" th:href="@{/admin/category}">Danh sách danh mục sản phẩm</a>
+                                            <a class="nav-link" th:href="@{/admin/category-save}">Tạo mới danh mục sản phẩm</a>
+                                            <a class="nav-link" href="password.html">...</a>
+                                        </nav>
+                                    </div>
                                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseProduct" aria-expanded="false" aria-controls="pagesCollapseProduct">
-                                        Manage Product
+                                        Quản lý sản phẩm
                                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                     </a>
                                     <div class="collapse" id="pagesCollapseProduct" aria-labelledby="headingOne" data-parent="#sidenavAccordionPages">
                                         <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" th:href="@{/admin/product}">Product List</a>
-                                            <a class="nav-link" th:href="@{/admin/product-save}">Create Product</a>
+                                            <a class="nav-link" th:href="@{/admin/product}">Danh sách sản phẩm</a>
+                                            <a class="nav-link" th:href="@{/admin/product-save}">Tạo mới sản phẩm</a>
                                             <a class="nav-link" href="password.html">...</a>
                                         </nav>
                                     </div>
                                      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseOrder" aria-expanded="false" aria-controls="pagesCollapseOrder">
-                                        Manage Order
+                                        Quản lý Order
                                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                     </a>
                                     <div class="collapse" id="pagesCollapseOrder" aria-labelledby="headingOne" data-parent="#sidenavAccordionPages">
                                         <nav class="sb-sidenav-menu-nested nav">
-                                             <a class="nav-link" th:href="@{/admin/orders}">Order List</a>
+                                             <a class="nav-link" th:href="@{/admin/orders}">Danh sách Order </a>
                                         </nav>
                                     </div>
 

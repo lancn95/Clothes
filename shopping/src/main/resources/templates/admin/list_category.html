@@ -8,48 +8,40 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4">Danh sách sản phẩm</h1>
+                        <h1 class="mt-4">Danh sách danh mục sản phẩm</h1>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Danh sách sản phẩm</li>
+                            <li class="breadcrumb-item active">Danh sách danh mục sản phẩm</li>
                         </ol>
                         <div class="row">
                         
-                           <th:block th:if="${#lists.isEmpty(products.pageList)}">
-								<h3>Không có sản phẩm nào!</h3>
+                           <th:block th:if="${#lists.isEmpty(categories.pageList)}">
+								<h3>Không có  danh mục sản phẩm nào!</h3>
 							</th:block>
 							
-							<th:block th:unless="${#lists.isEmpty(products.pageList)}">
+							<th:block th:unless="${#lists.isEmpty(categories.pageList)}">
 								<table class="table table-bordered table-hover">
 									<thead>
 										<tr>
 											<th>Số thứ tự</th>
-											<th>Ảnh</th>
-											<th>Code</th>
-											<th>Thuộc danh mục</th>
-											<th>Tên sản phẩm</th>
-											<th>Mô tả</th>
+											<th>Mã Danh Mục Sản Phẩm</th>
+											<th>Tên Danh Mục Sản Phẩm</th>
 											<th>Ngày tạo</th>
 											<th>Sửa <span class="glyphicon glyphicon-pencil"></span></th>
 											<th>Xóa</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr th:each="product, iterStat : ${products.pageList}">
+										<tr th:each="category, iterStat : ${categories.pageList}">
 											<td th:text="${iterStat.count}"></td>
-											<td>
-											<img class="product-image" style="width:100px"
-               									 th:src="@{|/productImage?code=${product.code}|}" /></td>
-											<td th:text="${product.code}"></td>
-											<td th:text="${product.category_id}"></td>
-											<td th:text="${product.name}"></td>
-											<td th:text="${product.description}"></td>
-											<td th:text="${#dates.format(product.createDate,'dd-MM-yyyy HH:mm')}"></td>
+											<td th:text="${category.id}"></td>
+											<td th:text="${category.name}"></td>
+											<td th:text="${#dates.format(category.createDate,'dd-MM-yyyy HH:mm')}"></td>
 											<td><a
-												th:href="@{|/admin/product-update?code=${product.code}|}"> <span
+												th:href="@{|/admin/category-update?id=${category.id}|}"> <span
 													class="glyphicon glyphicon-pencil">Sửa</span>
 											</a></td>
 											<td><a
-												th:href="@{|/admin/product-delete?code=${product.code}|}"
+												th:href="@{|/admin/category-delete?id=${category.id}|}"
 												onclick="if(!(confirm('Bận có chắc chắn muốn xóa sản phẩm này không ?'))) return false">
 													<span class="glyphicon glyphicon-trash">Xóa</span>
 											</a></td>
@@ -66,7 +58,7 @@
 				                <ul class="pagination">
 									<li
 										th:class="${currentIndex == 1}? 'page-item disabled' : 'page-item'">
-										<a class="page-link" th:href="@{/admin/product}">First</a>
+										<a class="page-link" th:href="@{/admin/category}">First</a>
 									</li>
 									<li
 										th:class="${currentIndex == 1}? 'page-item disabled': 'page-item' ">

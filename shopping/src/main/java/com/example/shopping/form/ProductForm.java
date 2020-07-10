@@ -9,7 +9,8 @@ public class ProductForm {
 	private String name;
 	private double price;
 	private String description;
-
+	private String category_id;
+	
 	private boolean newProduct = false;
 
 	// Upload file.
@@ -24,6 +25,7 @@ public class ProductForm {
 		this.name = product.getName();
 		this.description = product.getDescription();
 		this.price = product.getPrice();
+		this.category_id = product.getCategory().getId();
 
 	}
 
@@ -75,4 +77,13 @@ public class ProductForm {
 		this.fileData = fileData;
 	}
 
+	public String getCategory_id() {
+		return category_id;
+	}
+
+	public void setCategory_id(String category_id) {
+		this.category_id = category_id;
+	}
+	
+	
 }

@@ -5,8 +5,12 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -23,10 +27,10 @@ public class Product implements Serializable {
 
 	@Column(name = "Name", length = 100, nullable = false)
 	private String name;
-	
+
 	@Column(name = "Description", length = 100, nullable = false)
 	private String description;
-	
+
 	@Column(name = "Price", nullable = false)
 	private double price;
 
@@ -37,6 +41,11 @@ public class Product implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "Create_Date", nullable = false)
 	private Date createDate;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "categories_id", nullable = false, //
+			foreignKey = @ForeignKey(name = "PRODUCT_CATE_FK"))
+	private Category category;
 
 	public Product() {
 
@@ -89,6 +98,13 @@ public class Product implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-	
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
 }

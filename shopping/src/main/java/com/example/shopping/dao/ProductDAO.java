@@ -14,9 +14,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.shopping.entities.Category;
 import com.example.shopping.entities.Product;
 import com.example.shopping.form.ProductForm;
 import com.example.shopping.model.ProductInfo;
+import com.example.shopping.utils.Utils;
 
 @Transactional
 @Repository
@@ -24,6 +26,9 @@ public class ProductDAO {
 
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	@Autowired
+	private CategoryDAO categoryDAO;
 
 	public List<Product> findAll() {
 		try {
@@ -36,7 +41,20 @@ public class ProductDAO {
 		}
 		return null;
 	}
-
+	
+	public List<ProductInfo> findAllProductInfo(){
+		try {
+			String sql = "Select * from products order by create_date desc";
+			Session session = this.sessionFactory.getCurrentSession();
+			Query<ProductInfo> query = session.createNativeQuery(sql);
+			
+			return query.getResultList();
+		}catch(NoResultException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	public Product findProduct(String code) {
 		try {
 			String sql = "select p from " + Product.class.getName() + " p where p.code =: code";
@@ -57,7 +75,12 @@ public class ProductDAO {
 		if (product == null) {
 			return null;
 		}
-		return new ProductInfo(product.getCode(), product.getName(), product.getPrice());
+		return new ProductInfo(product.getCode(),
+								product.getName(),
+								product.getPrice(),
+								product.getDescription(),
+								product.getImage(),
+								product.getCategory().getId());
 	}
 
 	@SuppressWarnings("unused")
@@ -80,6 +103,9 @@ public class ProductDAO {
 		product.setName(productForm.getName());
 		product.setDescription(productForm.getDescription());
 		product.setPrice(productForm.getPrice());
+		
+		Category category = categoryDAO.findById(productForm.getCategory_id());
+		product.setCategory(category);
 
 		if (productForm.getFileData() != null) {
 			byte[] image = null;
@@ -138,7 +164,7 @@ public class ProductDAO {
 		
 		Product	product = this.findProduct(code);
 		// session.delete(object) chỉ thực hiện đc khi chưa có khóa chính hoặc ngoại
-		session.delete(product);
+		boolean result = Utils.deleteById(Product.class, code);
 		
 		session.flush();
 		
