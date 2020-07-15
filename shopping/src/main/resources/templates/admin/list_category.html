@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head th:replace = "admin/common :: head"></head>
     <body class="sb-nav-fixed">
-        
+        <nav th:replace="admin/common :: topnav"></nav>
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav" th:replace = "admin/common :: layoutSidenav_nav"></div>
             <div id="layoutSidenav_content">
@@ -10,50 +10,76 @@
                     <div class="container-fluid">
                         <h1 class="mt-4">Danh sách danh mục sản phẩm</h1>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Danh sách danh mục sản phẩm</li>
+                            <li class="breadcrumb-item active"><a th:href="@{/admin/category}">Danh sách danh mục sản phẩm</a></li>
                         </ol>
                         <div class="row">
-                        
-                           <th:block th:if="${#lists.isEmpty(categories.pageList)}">
-								<h3>Không có  danh mục sản phẩm nào!</h3>
+							<div class="col-6 no-padding">
+								<form class="form-inline" action="#" th:action="@{/category-search/1}" method="get">
+									<input class="form-control mr-sm-2" type="search" name="name" placeholder="Search by name ..." />
+									<button class="btn btn-primary" type="submit">
+										<i class="fa fa-search"></i> Tìm kiếm
+									</button>
+								</form>
+							</div>
+					
+							<div class="col-6 no-padding">
+								<a href="#" th:href="@{/admin/category-save}" class="btn btn-success float-right">
+									<i class="fa fa-plus-square"></i> Thêm danh mục
+								</a>
+							</div>
+						</div>
+						
+                        <div class="mt-4">
+							<div th:if="${successMessage}" class="col-12 alert alert-success alert-dismissible fade show" role="alert">
+								<span th:text="${successMessage}"></span>
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+				
+							<th:block th:if="${#lists.isEmpty(categories.pageList)}">
+								<h5>Không có danh mục sản phẩm nào</h5>
 							</th:block>
-							
+				
 							<th:block th:unless="${#lists.isEmpty(categories.pageList)}">
-								<table class="table table-bordered table-hover">
-									<thead>
+								<div class="table-responsive">
+									<h5>Danh sách các danh mục</h5>
+									<table class="table table-bordered table-hover">
+										<thead>
 										<tr>
-											<th>Số thứ tự</th>
-											<th>Mã Danh Mục Sản Phẩm</th>
-											<th>Tên Danh Mục Sản Phẩm</th>
+											<th>#</th>
+											<th>Mã danh mục sản phẩm</th>
+											<th>Tên danh mục sản phẩm</th>
 											<th>Ngày tạo</th>
-											<th>Sửa <span class="glyphicon glyphicon-pencil"></span></th>
+											<th>Sửa</th>
 											<th>Xóa</th>
 										</tr>
-									</thead>
-									<tbody>
-										<tr th:each="category, iterStat : ${categories.pageList}">
-											<td th:text="${iterStat.count}"></td>
+										</thead>
+										<tbody>
+										<tr th:each="category,iterStat : ${categories.pageList}">
+											<th scope="row" th:text="${iterStat.count}"></th>
 											<td th:text="${category.id}"></td>
 											<td th:text="${category.name}"></td>
-											<td th:text="${#dates.format(category.createDate,'dd-MM-yyyy HH:mm')}"></td>
-											<td><a
-												th:href="@{|/admin/category-update?id=${category.id}|}"> <span
-													class="glyphicon glyphicon-pencil">Sửa</span>
-											</a></td>
-											<td><a
-												th:href="@{|/admin/category-delete?id=${category.id}|}"
-												onclick="if(!(confirm('Bận có chắc chắn muốn xóa sản phẩm này không ?'))) return false">
-													<span class="glyphicon glyphicon-trash">Xóa</span>
-											</a></td>
+											<td th:text="${category.createDate}"></td>
+											<td>
+												<a href="#" th:href="@{|/admin/category-update?id=${category.id}|}" class="mr-sm-2 text-primary">
+													<i class="fas fa-marker"></i> 
+												</a> 
+											</td>
+											<td>	
+												<a href="#" th:href="@{|/admin/category-delete?id=${category.id}|}"
+												onclick="if(!(confirm('Bận có chắc chắn muốn xóa danh mục này không ?'))) return false"
+												 class="text-danger">
+													<i class="fa fa-trash"></i>
+												</a>
+											</td>
 										</tr>
-									</tbody>
-								</table>
-								
-								
-							</th:block> 
-                            
-                        </div>
-                        <div class="row">
+										</tbody>
+									</table>
+								</div>
+							</th:block>
+						</div>
+                        <div class="">
                         	<nav aria-label="Page navigation example">
 				                <ul class="pagination">
 									<li

@@ -16,5 +16,5 @@ public interface CategoryService {
 	
 	public void delete(CategoryForm categoryForm);
 		
-
+	public List<Category> searchByNameLike(String name);
 }

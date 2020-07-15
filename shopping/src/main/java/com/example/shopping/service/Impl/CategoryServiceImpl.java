@@ -28,23 +28,30 @@ public class CategoryServiceImpl implements CategoryService {
 		categoryDAO.saveCategory(categoryForm);
 
 	}
-	
+
 	@Override
 	public Category findCategory(String id) {
 
 		return categoryDAO.findById(id);
 	}
-	
+
 	@Override
 	public void update(CategoryForm categoryForm) {
 		categoryDAO.updateCategory(categoryForm);
-		
+
 	}
-	
+
 	@Override
 	public void delete(CategoryForm categoryForm) {
 		categoryDAO.deleteCategory(categoryForm);
-		
+
+	}
+
+	@Override
+	public List<Category> searchByNameLike(String name) {
+		List<Category> categories = categoryDAO.searchByNameLike(name);
+
+		return categories;
 	}
 
 }

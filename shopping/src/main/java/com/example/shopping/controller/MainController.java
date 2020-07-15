@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -39,6 +40,7 @@ import com.example.shopping.service.Impl.ProductServiceImpl;
 import com.example.shopping.service.Impl.UserServiceImpl;
 import com.example.shopping.utils.Utils;
 import com.example.shopping.utils.WebUtils;
+import com.example.shopping.validator.CustomerFormValidator;
 
 @Controller
 public class MainController {
@@ -58,6 +60,9 @@ public class MainController {
 	@Autowired
 	private EmailService emailService;
 
+	@Autowired
+	private CustomerFormValidator customerFormValidator;
+
 	@InitBinder
 	public void myInitBinder(WebDataBinder dataBinder) {
 		Object target = dataBinder.getTarget();
@@ -74,9 +79,9 @@ public class MainController {
 
 		// Trường hợp save thông tin khách hàng.
 		// (@ModelAttribute @Validated CustomerInfo customerForm)
-		// else if (target.getClass() == CustomerForm.class) {
-		// dataBinder.setValidator(customerFormValidator);
-		// }
+		else if (target.getClass() == CustomerForm.class) {
+			dataBinder.setValidator(customerFormValidator);
+		}
 
 	}
 
@@ -178,13 +183,13 @@ public class MainController {
 	@RequestMapping(value = "/product", method = RequestMethod.GET)
 	public String listProduct(HttpServletRequest request, Model model) {
 		request.getSession().setAttribute("productlist", null);
-		
+
 		return "redirect:/product/page/1";
 	}
 
 	@RequestMapping(value = "/product/page/{pageNumber}", method = RequestMethod.GET)
 	public String listProductHandler(HttpServletRequest request, @PathVariable int pageNumber, Model model) {
-		PagedListHolder<?> pages = (PagedListHolder<?>) request.getSession().getAttribute("productlist");
+		PagedListHolder<?> pages = (PagedListHolder<?>) request.getSession().getAttribute("productlis");
 		int pageSize = 9;
 		List<Product> products = productServiceImpl.findAll();
 		if (pages == null) {
@@ -196,9 +201,9 @@ public class MainController {
 				pages.setPage(goToPage);
 			}
 		}
-		request.getSession().setAttribute("productlist", pages);
-		int current = pages.getPage() + 1;					 // vị trí hiện tại  = số trang hiện tại + 1
-		int begin = Math.max(1, current - products.size());  // 1 vi current - products.size() 
+		request.getSession().setAttribute("productlis", pages);
+		int current = pages.getPage() + 1; // vị trí hiện tại = số trang hiện tại + 1
+		int begin = Math.max(1, current - products.size()); // 1 vi current - products.size()
 		int end = Math.min(begin + 5, pages.getPageCount()); // pages.getPageCount()
 		int totalPageCount = pages.getPageCount();
 		String baseUrl = "/product/page/";
@@ -209,7 +214,6 @@ public class MainController {
 		model.addAttribute("totalPageCount", totalPageCount);
 		model.addAttribute("baseUrl", baseUrl);
 		model.addAttribute("products", pages);
-		
 
 		CartInfo mycart = Utils.getInfoCartInSession(request);
 		if (mycart != null) {
@@ -297,6 +301,11 @@ public class MainController {
 	public String getInfoCustomer(HttpServletRequest request, Model model) {
 		CartInfo cartInfo = Utils.getInfoCartInSession(request);
 
+		if (cartInfo.isEmpty()) {
+
+			return "redirect:/shoppingCart";
+		}
+
 		CustomerInfo customerInfo = cartInfo.getCustomerInfo();
 		CustomerForm customerForm = new CustomerForm(customerInfo);
 
@@ -307,7 +316,7 @@ public class MainController {
 	// POST: Save thông tin khách hàng.
 	@RequestMapping(value = "/shoppingCartCustomer", method = RequestMethod.POST)
 	public String saveInfoCustomer(HttpServletRequest request,
-			@ModelAttribute("customerForm") CustomerForm customerForm, BindingResult result,
+			@ModelAttribute("customerForm") @Validated CustomerForm customerForm, BindingResult result,
 			final RedirectAttributes redirect) {
 		if (result.hasErrors()) {
 			customerForm.setValid(false);
@@ -383,7 +392,7 @@ public class MainController {
 		AppUser appUser = new AppUser();
 		model.addAttribute("appUser", appUser);
 
-		System.out.println("GET username: " + appUser.getUserName());
+		// System.out.println("GET username: " + appUser.getUserName());
 		return "customer/register";
 	}
 
@@ -416,15 +425,15 @@ public class MainController {
 
 				}
 			}
-			// create new user 
+			// create new user
 			userServiceImpl.createUser(appUser);
-			// get id from username 
+			// get id from username
 			AppUser user = userServiceImpl.findByName(appUser.getUserName());
 			System.out.println("info user: " + user);
 			System.out.println("info id from new user: " + user.getUserId());
 			// add role for new user by user id
 			userServiceImpl.addRoleForUser(user.getUserId());
-			// insert here
+
 		}
 
 		redirect.addFlashAttribute("success", "Bạn đã đăng ký thành công, hãy đăng nhập nhé");
@@ -482,19 +491,6 @@ public class MainController {
 		return "redirect:/userInfo";
 	}
 
-	@RequestMapping(value = "/admin", method = RequestMethod.GET)
-	public String adminPage(Model model, Principal principal) {
-
-		User loginedUser = (User) ((Authentication) principal).getPrincipal();
-		System.out.println("useradminname: " + principal.getName());
-
-		String userInfo = WebUtils.toString(loginedUser);
-		String adminname = principal.getName();
-		model.addAttribute("userInfo", userInfo);
-		model.addAttribute("name", adminname);
-		return "admin/index";
-	}
-
 	@RequestMapping(value = "/403", method = RequestMethod.GET)
 	public String accessDenied(Model model, Principal principal) {
 
@@ -517,7 +513,8 @@ public class MainController {
 		model.addAttribute("title", "Logout");
 		return "redirect:/";
 	}
-
+	
+	// load ảnh hiện thị
 	@RequestMapping(value = { "/productImage" }, method = RequestMethod.GET)
 	public void productImage(HttpServletRequest request, HttpServletResponse response, Model model,
 			@RequestParam("code") String code) throws IOException {
@@ -532,15 +529,18 @@ public class MainController {
 		response.getOutputStream().close();
 	}
 
-	@RequestMapping(value = { "/blog" }, method = RequestMethod.GET)
-	public String blog(HttpServletRequest request, HttpServletResponse response, Model model) {
 
-		return "customer/blog";
-	}
-
-	@RequestMapping(value = { "/blogDetail" }, method = RequestMethod.GET)
-	public String blogDetail(HttpServletRequest request, HttpServletResponse response, Model model) {
-
-		return "customer/blog-details";
-	}
+	/*
+	 * @RequestMapping(value = { "/filter" }, method = RequestMethod.GET) public
+	 * String getInfoFilter(Model model, HttpServletRequest request) { FilterInfo
+	 * filter = new FilterInfo(); model.addAttribute("FilterInfo", filter); return
+	 * "customer/shop"; }
+	 * 
+	 * @RequestMapping(value = { "/filter" }, method = RequestMethod.POST) public
+	 * String Filter(@ModelAttribute FilterInfo filter, HttpServletRequest request)
+	 * { System.out.println("From: " + filter.getFrom()); System.out.println("To: "
+	 * + filter.getTo());
+	 * 
+	 * return "customer/shop"; }
+	 */
 }

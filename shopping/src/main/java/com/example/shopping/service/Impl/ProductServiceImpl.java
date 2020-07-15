@@ -3,13 +3,12 @@ package com.example.shopping.service.Impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.ConditionalConverter;
 import org.springframework.stereotype.Service;
 
-import com.example.shopping.convert.ProductToProductInfo;
 import com.example.shopping.dao.ProductDAO;
 import com.example.shopping.entities.Product;
 import com.example.shopping.form.ProductForm;
+import com.example.shopping.mapping.ProductMapping;
 import com.example.shopping.model.ProductInfo;
 import com.example.shopping.service.ProductService;
 
@@ -29,9 +28,9 @@ public class ProductServiceImpl implements ProductService {
 	}
 	
 	public List<ProductInfo> findAllProInfo() {
-		List<Product> products = this.productDAO.findAll();
+		List<Product> products = productDAO.findAll();
 		// ép list product sang list product info
-		List<ProductInfo> listProductInfo = ProductToProductInfo.convertProductInfo(products);
+		List<ProductInfo> listProductInfo = ProductMapping.productsToInfos(products);
 		
 		return listProductInfo;
 	}
@@ -48,9 +47,12 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public List<Product> seachByNameLike(String name) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ProductInfo> seachByNameLike(String name) {
+		List<Product> products = productDAO.searchByNameLike(name);
+		
+		List<ProductInfo> listProductInfo = ProductMapping.productsToInfos(products);
+		
+		return listProductInfo;
 	}
 
 	@Override

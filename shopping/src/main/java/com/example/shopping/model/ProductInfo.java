@@ -1,5 +1,7 @@
 package com.example.shopping.model;
 
+import java.util.Date;
+
 import com.example.shopping.entities.Product;
 
 public class ProductInfo {
@@ -9,6 +11,7 @@ public class ProductInfo {
 	private double price;
 	private byte[] image;
 	private String category_id;
+	private Date createDate;
 	
 	public ProductInfo(Product product) {
 		this.code = product.getCode();
@@ -79,6 +82,14 @@ public class ProductInfo {
 
 	public void setCategory_id(String category_id) {
 		this.category_id = category_id;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
 	}
 	
 	

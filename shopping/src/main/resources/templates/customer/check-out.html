@@ -26,20 +26,20 @@
                         <div class="checkout-content">
                             <a th:href="@{/shoppingCartCustomer}" class="content-btn">Chỉnh sửa thông tin của bạn</a>
                         </div>
-                        <h4>Biiling Details</h4>
-                        <h4>Customer Information:</h4>
+                        <h4>Chi tiết hóa đơn</h4>
+                        <h4>Thông tin khách hàng:</h4>
 						         <ul class="list-group">
-						            <li class="list-group-item">Name: <span th:utext="${cartInfo.customerInfo.name}"></span></li>
+						            <li class="list-group-item">Tên: <span th:utext="${cartInfo.customerInfo.name}"></span></li>
 						            <li class="list-group-item">Email: <span th:utext="${cartInfo.customerInfo.address}"></span></li>
-						            <li class="list-group-item">Phone: <span th:utext="${cartInfo.customerInfo.email}"></span></li>
-						            <li class="list-group-item">Address: <span th:utext="${cartInfo.customerInfo.phone}"></span></li>
+						            <li class="list-group-item">Số điện thoại: <span th:utext="${cartInfo.customerInfo.email}"></span></li>
+						            <li class="list-group-item">Địa chỉ: <span th:utext="${cartInfo.customerInfo.phone}"></span></li>
 						         </ul>
 
                          <div class="row">
                             <div class="proceed-checkout" style="margin-top:20px">
                                 <ul>
-                                    <li class="subtotal">Quantity<span th:text="${#numbers.formatDecimal(cartInfo.quantityTotal,2,0,'COMMA')}"></span></li>
-                                    <li class="cart-total">Total: &nbsp;&nbsp;&nbsp;
+                                    <li class="subtotal">Số lượng<span th:text="${#numbers.formatDecimal(cartInfo.quantityTotal,2,0,'COMMA')}"></span></li>
+                                    <li class="cart-total">Tổng cộng: &nbsp;&nbsp;&nbsp;
                                     	<span th:text="${#numbers.formatDecimal(cartInfo.amountTotal,2,3,'COMMA')}"></span>
                                     </li>
                                 </ul>
@@ -56,7 +56,7 @@
                             <h4>Your Order</h4>
                             <div class="order-total">
                                 <ul class="order-table" th:each="cartLineInfo : ${cartInfo.cartLines}">
-                                    <li>Product <span>Total</span><span>Total</span></li>
+                                    <li>Product <span>Total</span></li>
                                     <li class="fw-normal">
                                     	<img th:src="@{|/productImage?code=${cartLineInfo.productInfo.code}|}" alt="" style="width:100px">
                                     </li>
@@ -91,7 +91,7 @@
                                 </div>
 
                                 <div class="order-btn">
-                                    <button type="submit" class="site-btn place-btn">Place Order</button>
+                                    <button type="submit" class="site-btn place-btn">Đặt hàng</button>
                                 </div>
                             </div>
                         </div>

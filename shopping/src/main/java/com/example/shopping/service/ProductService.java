@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.shopping.entities.Product;
 import com.example.shopping.form.ProductForm;
+import com.example.shopping.model.ProductInfo;
 
 public interface ProductService {
 	List<Product> findAll();
@@ -16,5 +17,5 @@ public interface ProductService {
 	
 	void delete(ProductForm productForm);
 	
-	List<Product> seachByNameLike(String name);
+	List<ProductInfo> seachByNameLike(String name);
 }

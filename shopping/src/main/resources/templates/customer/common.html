@@ -76,7 +76,7 @@
                     <div class="col-lg-2 col-md-2">
                         <div class="logo">
                             <a th:href="@{/}">
-                                <img src="/img/logo.png" alt="">
+                                <img src="/img/your-logo-Lan.png" alt="">
                             </a>
                         </div>
                     </div>
@@ -246,21 +246,23 @@
         </div>
         <div class="filter-widget">
             <h4 class="fw-title">Price</h4>
-            <div class="filter-range-wrap">
-                <div class="range-slider">
-                    <div class="price-input">
-                        <input type="text" id="minamount">
-                        <input type="text" id="maxamount">
-                    </div>
-                </div>
-                <div class="price-range ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"
-                    data-min="33" data-max="98">
-                    <div class="ui-slider-range ui-corner-all ui-widget-header"></div>
-                    <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
-                    <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
-                </div>
-            </div>
-            <a href="#" class="filter-btn">Filter</a>
+           <!--  <form method="post" th:action="@{/filter}" th:object = ${FilterInfo}> -->
+	            <div class="filter-range-wrap">
+	                <div class="range-slider">
+	                    <div class="price-input">
+	                        <input type="text" id="minamount">
+	                        <input type="text" id="maxamount">
+	                    </div>
+	                </div>
+	                <div class="price-range ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"
+	                    data-min="33" data-max="98">
+	                    <div class="ui-slider-range ui-corner-all ui-widget-header"></div>
+	                    <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
+	                    <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
+	                </div>
+	            </div>
+	            <a type="submit" class="filter-btn">Filter</a>
+            <!-- </form> -->
         </div>
         <div class="filter-widget">
             <h4 class="fw-title">Color</h4>
@@ -391,7 +393,7 @@
                 <div class="col-lg-12">
                     <div class="breadcrumb-text product-more">
                         <a th:href="@{/}"><i class="fa fa-home"></i> Home</a>
-                        <a th:href="@{/productList}">Shop</a>
+                        <a th:href="@{/product}">Shop</a>
                         <span>Detail</span>
                     </div>
                 </div>
@@ -407,7 +409,7 @@
                 <div class="col-lg-12">
                     <div class="breadcrumb-text product-more">
                         <a th:href="@{/}"><i class="fa fa-home"></i> Home</a>
-                        <a th:href="@{/productList}">Shop</a>
+                        <a th:href="@{/product}">Shop</a>
                         <span>Shopping Cart</span>
                     </div>
                 </div>
@@ -423,7 +425,7 @@
                 <div class="col-lg-12">
                     <div class="breadcrumb-text product-more">
                         <a th:href="@{/}"><i class="fa fa-home"></i> Home</a>
-                        <a th:href="@{/productList}">Shop</a>
+                        <a th:href="@{/product}">Shop</a>
                         <span>Check Out</span>
                     </div>
                 </div>
@@ -440,6 +442,21 @@
                     <div class="breadcrumb-text">
                         <a th:href="@{/}"><i class="fa fa-home"></i> Home</a>
                         <span>Thank You</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb Section Begin -->
+	
+	<!-- Breadcrumb Section Begin -->
+    <div class="breacrumb-section-blogs" th:fragment="breacrumb-section-blogs">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb-text">
+                        <a th:href="@{/}"><i class="fa fa-home"></i> Home</a>
+                        <span>Blog</span>
                     </div>
                 </div>
             </div>
@@ -534,8 +551,8 @@
                             <li>Email: hello.colorlib@gmail.com</li>
                         </ul>
                         <div class="footer-social">
-                            <a href="#"><i class="fa fa-facebook"></i></a>
-                            <a href="#"><i class="fa fa-instagram"></i></a>
+                            <a href="https://www.facebook.com/"><i class="fa fa-facebook"></i></a>
+                            <a href="https://www.instagram.com/?hl=vi"><i class="fa fa-instagram"></i></a>
                             <a href="#"><i class="fa fa-twitter"></i></a>
                             <a href="#"><i class="fa fa-pinterest"></i></a>
                         </div>
@@ -556,21 +573,22 @@
                     <div class="footer-widget">
                         <h5>My Account</h5>
                         <ul>
-                            <li><a href="#">My Account</a></li>
+                            <li><a th:href="@{/userAccountInfo}">My Account</a></li>
                             <li><a href="#">Contact</a></li>
-                            <li><a href="#">Shopping Cart</a></li>
-                            <li><a href="#">Shop</a></li>
+                            <li><a th:href="@{/shoppingCart}">Shopping Cart</a></li>
+                            <li><a th:href="@{/product}">Shop</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="newslatter-item">
-                        <h5>Join Our Newsletter Now</h5>
+                        <!-- <h5>Join Our Newsletter Now</h5>
                         <p>Get E-mail updates about our latest shop and special offers.</p>
                         <form action="#" class="subscribe-form">
                             <input type="text" placeholder="Enter Your Mail">
                             <button type="button">Subscribe</button>
-                        </form>
+                        </form> -->
+                       <img src="img/Cát Ngọc Lân.png" alt="">
                     </div>
                 </div>
             </div>

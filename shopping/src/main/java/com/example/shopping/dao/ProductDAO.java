@@ -20,16 +20,16 @@ import com.example.shopping.form.ProductForm;
 import com.example.shopping.model.ProductInfo;
 import com.example.shopping.utils.Utils;
 
-@Transactional
 @Repository
 public class ProductDAO {
 
 	@Autowired
 	private SessionFactory sessionFactory;
-	
+
 	@Autowired
 	private CategoryDAO categoryDAO;
 
+	@Transactional(rollbackFor = NoResultException.class)
 	public List<Product> findAll() {
 		try {
 			String sql = "select p from " + Product.class.getName() + " p " + " order by p.createDate desc ";
@@ -41,20 +41,38 @@ public class ProductDAO {
 		}
 		return null;
 	}
-	
-	public List<ProductInfo> findAllProductInfo(){
+
+	@Transactional(rollbackFor = NoResultException.class)
+	public List<Product> searchByNameLike(String name) {
 		try {
-			String sql = "Select * from products order by create_date desc";
-			Session session = this.sessionFactory.getCurrentSession();
-			Query<ProductInfo> query = session.createNativeQuery(sql);
-			
+			String sql = "select c from " + Product.class.getName() + " c "
+					+ "where c.name like concat ('%', :name ,'%')";
+			Session session = sessionFactory.getCurrentSession();
+			Query<Product> query = session.createQuery(sql, Product.class);
+			query.setParameter("name", name);
+
 			return query.getResultList();
-		}catch(NoResultException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 	
+	@Transactional(rollbackFor = NoResultException.class)
+	public List<ProductInfo> findAllProductInfo() {
+		try {
+			String sql = "Select * from products order by create_date desc";
+			Session session = this.sessionFactory.getCurrentSession();
+			Query<ProductInfo> query = session.createNativeQuery(sql);
+
+			return query.getResultList();
+		} catch (NoResultException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Transactional(rollbackFor = NoResultException.class)
 	public Product findProduct(String code) {
 		try {
 			String sql = "select p from " + Product.class.getName() + " p where p.code =: code";
@@ -69,18 +87,15 @@ public class ProductDAO {
 			return null;
 		}
 	}
-
+	
+	@Transactional(rollbackFor = NoResultException.class)
 	public ProductInfo findProductInfo(String code) {
 		Product product = this.findProduct(code);
 		if (product == null) {
 			return null;
 		}
-		return new ProductInfo(product.getCode(),
-								product.getName(),
-								product.getPrice(),
-								product.getDescription(),
-								product.getImage(),
-								product.getCategory().getId());
+		return new ProductInfo(product.getCode(), product.getName(), product.getPrice(), product.getDescription(),
+				product.getImage(), product.getCategory().getId());
 	}
 
 	@SuppressWarnings("unused")
@@ -103,7 +118,7 @@ public class ProductDAO {
 		product.setName(productForm.getName());
 		product.setDescription(productForm.getDescription());
 		product.setPrice(productForm.getPrice());
-		
+
 		Category category = categoryDAO.findById(productForm.getCategory_id());
 		product.setCategory(category);
 
@@ -125,20 +140,20 @@ public class ProductDAO {
 		// Nếu có lỗi tại DB, ngoại lệ sẽ ném ra ngay lập tức
 		session.flush();
 	}
-	
+
 	@SuppressWarnings("unused")
 	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 	public void updateProduct(ProductForm productForm) {
 		Session session = sessionFactory.getCurrentSession();
 		String code = productForm.getCode();
-		
-		Product	product = this.findProduct(code);
+
+		Product product = this.findProduct(code);
 		product.setCode(code);
 		product.setName(productForm.getName());
 		product.setDescription(productForm.getDescription());
 		product.setPrice(productForm.getPrice());
-		
-		if(productForm.getFileData() != null) {
+
+		if (productForm.getFileData() != null) {
 			byte[] image = null;
 			try {
 				image = productForm.getFileData().getBytes();
@@ -151,23 +166,23 @@ public class ProductDAO {
 
 		}
 		session.update(product);
-		
+
 		session.flush();
-		
+
 	}
-	
+
 	@SuppressWarnings("unused")
 	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 	public void deleteProduct(ProductForm productForm) {
 		Session session = sessionFactory.getCurrentSession();
 		String code = productForm.getCode();
-		
-		Product	product = this.findProduct(code);
+
+		Product product = this.findProduct(code);
 		// session.delete(object) chỉ thực hiện đc khi chưa có khóa chính hoặc ngoại
 		boolean result = Utils.deleteById(Product.class, code);
-		
+
 		session.flush();
-		
+
 	}
 
 }
