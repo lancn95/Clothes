@@ -6,10 +6,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import com.example.shopping.entities.AppUser;
+import com.example.shopping.model.UserInfo;
 
 @Transactional
 public interface UserService {
 	List<AppUser> findAll();
+	
+	List<UserInfo> findAllUserInfo();
 	
 	AppUser findByName(String name);
 	
@@ -29,4 +32,8 @@ public interface UserService {
 	public void addRoleForUser(Long userId);
 	
 	public Long getUserIDMax();
+
+	List<AppUser> searchByNameLike(String name);
+	
+	List<UserInfo> searchByNameLikeUserInfo(String name);
 }

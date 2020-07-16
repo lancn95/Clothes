@@ -30,6 +30,7 @@ import com.example.shopping.entities.AppUser;
 import com.example.shopping.entities.Product;
 import com.example.shopping.form.CustomerForm;
 import com.example.shopping.model.CartInfo;
+import com.example.shopping.model.CartLineInfo;
 import com.example.shopping.model.CustomerInfo;
 import com.example.shopping.model.ProductInfo;
 import com.example.shopping.model.UserInfo;
@@ -108,6 +109,10 @@ public class MainController {
 		AppUser u = emailServiceImpl.findByEmail(user.getEmail());
 
 		System.out.println("Name user: " + u.getUserName());
+		if(u.isEnabled() == false) {
+			model.addAttribute("successMessage", "Tài khoản này đã bị khóa");
+			return "customer/forgotPassword";
+		}
 		if (u == null) {
 			model.addAttribute("errorMessage", "Địa chỉ email không tồn tại");
 
@@ -231,7 +236,32 @@ public class MainController {
 			product = productServiceImpl.findProduct(code);
 		}
 		model.addAttribute("product", product);
+
+		CartLineInfo cartLineInfo = new CartLineInfo();
+
+		model.addAttribute("cartLineInfo", cartLineInfo);
 		return "customer/product";
+	}
+
+	@RequestMapping(value = "/productDetail", method = RequestMethod.POST)
+	public String buyProductWQ(@ModelAttribute CartLineInfo cartLineInfo, HttpServletRequest request,
+			@RequestParam("code") String code) {
+		Product product = null;
+
+		if (code != null && code.length() > 0) {
+			product = productServiceImpl.findProduct(code);
+		}
+		if (product != null) {
+
+			CartInfo cartInfo = Utils.getInfoCartInSession(request);
+
+			ProductInfo productInfo = new ProductInfo(product);
+
+			cartInfo.addProduct(productInfo, cartLineInfo.getQuantity());
+
+		}
+
+		return "redirect:/shoppingCart";
 	}
 
 	@RequestMapping(value = "/buyProduct", method = RequestMethod.GET)
@@ -466,6 +496,7 @@ public class MainController {
 		User loginedUser = (User) ((Authentication) principal).getPrincipal();
 
 		String userInfo = WebUtils.toString(loginedUser);
+		System.out.println("info: " + userInfo);
 		model.addAttribute("userInfo", userInfo);
 
 		// get info user by username
@@ -513,7 +544,7 @@ public class MainController {
 		model.addAttribute("title", "Logout");
 		return "redirect:/";
 	}
-	
+
 	// load ảnh hiện thị
 	@RequestMapping(value = { "/productImage" }, method = RequestMethod.GET)
 	public void productImage(HttpServletRequest request, HttpServletResponse response, Model model,
@@ -528,7 +559,6 @@ public class MainController {
 		}
 		response.getOutputStream().close();
 	}
-
 
 	/*
 	 * @RequestMapping(value = { "/filter" }, method = RequestMethod.GET) public

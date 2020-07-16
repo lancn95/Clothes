@@ -1,6 +1,7 @@
 package com.example.shopping.dao;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class ProductDAO {
 			String sql = "select p from " + Product.class.getName() + " p " + " order by p.createDate desc ";
 			Session session = this.sessionFactory.getCurrentSession();
 			Query<Product> query = session.createQuery(sql, Product.class);
+			
 			return query.getResultList();
 		} catch (NoResultException e) {
 			e.printStackTrace();
@@ -45,8 +47,8 @@ public class ProductDAO {
 	@Transactional(rollbackFor = NoResultException.class)
 	public List<Product> searchByNameLike(String name) {
 		try {
-			String sql = "select c from " + Product.class.getName() + " c "
-					+ "where c.name like concat ('%', :name ,'%')";
+			String sql = "select p from " + Product.class.getName() + " p "
+					+ "where p.name like concat ('%', :name ,'%')";
 			Session session = sessionFactory.getCurrentSession();
 			Query<Product> query = session.createQuery(sql, Product.class);
 			query.setParameter("name", name);
@@ -58,19 +60,7 @@ public class ProductDAO {
 		return null;
 	}
 	
-	@Transactional(rollbackFor = NoResultException.class)
-	public List<ProductInfo> findAllProductInfo() {
-		try {
-			String sql = "Select * from products order by create_date desc";
-			Session session = this.sessionFactory.getCurrentSession();
-			Query<ProductInfo> query = session.createNativeQuery(sql);
 
-			return query.getResultList();
-		} catch (NoResultException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
 
 	@Transactional(rollbackFor = NoResultException.class)
 	public Product findProduct(String code) {
@@ -98,7 +88,7 @@ public class ProductDAO {
 				product.getImage(), product.getCategory().getId());
 	}
 
-	@SuppressWarnings("unused")
+
 	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 	public void saveProduct(ProductForm productForm) {
 		Session session = sessionFactory.getCurrentSession();
@@ -170,18 +160,25 @@ public class ProductDAO {
 		session.flush();
 
 	}
-
-	@SuppressWarnings("unused")
-	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-	public void deleteProduct(ProductForm productForm) {
+	
+	@Transactional(rollbackFor = Exception.class)
+	private boolean deleteById(Class<?> type, Serializable id) {
 		Session session = sessionFactory.getCurrentSession();
-		String code = productForm.getCode();
+		Object persistentInstance = session.load(type, id);
+		if (persistentInstance != null) {
+			session.delete(persistentInstance);
+			return true;
+		}
+		return false;
+	}
 
-		Product product = this.findProduct(code);
-		// session.delete(object) chỉ thực hiện đc khi chưa có khóa chính hoặc ngoại
-		boolean result = Utils.deleteById(Product.class, code);
+	
+	@Transactional(rollbackFor = Exception.class)
+	public void deleteProduct(ProductForm productForm) {
+		 //session.delete(object) chỉ thực hiện đc khi chưa có khóa chính hoặc ngoại
+		
+		boolean result = this.deleteById(Product.class, productForm.getCode());
 
-		session.flush();
 
 	}
 

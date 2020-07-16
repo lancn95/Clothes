@@ -9,9 +9,7 @@
                 <main>
                     <div class="container-fluid">
                         <h1 class="mt-4">Danh sách sản phẩm</h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active"><a th:href="@{/admin/product}">Danh sách sản phẩm</a></li>
-                        </ol>
+                        <ol th:replace = "admin/common :: breadcumb-products"></ol>
                         <div class="">
                         <div style="display:flex;justify-content:space-between;margin-bottom:10px">
                         	<div>

@@ -13,7 +13,7 @@ import com.example.shopping.model.CartInfo;
 public class Utils {
 	
 	@Autowired
-	private static SessionFactory sessionFactory;
+	public static SessionFactory sessionFactory;
 	
 	// Thông tin các sản phẩm trong giỏ hàng, được lưu trữ trong Session.
 	public static CartInfo getInfoCartInSession(HttpServletRequest request) {
@@ -42,7 +42,7 @@ public class Utils {
 		return (CartInfo) request.getSession().getAttribute("lastOrderCart");
 	}
 	
-	@SuppressWarnings("unused")
+
 	public static boolean deleteById(Class<?> type, Serializable id) {
 		Session session = sessionFactory.getCurrentSession();
 	    Object persistentInstance = session.load(type, id);

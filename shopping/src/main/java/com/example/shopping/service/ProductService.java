@@ -18,4 +18,6 @@ public interface ProductService {
 	void delete(ProductForm productForm);
 	
 	List<ProductInfo> seachByNameLike(String name);
+	
+	public List<ProductInfo> findAllProInfo();
 }

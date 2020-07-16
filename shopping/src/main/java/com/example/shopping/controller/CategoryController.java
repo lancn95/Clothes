@@ -1,5 +1,6 @@
 package com.example.shopping.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -7,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +28,11 @@ public class CategoryController {
 
 	@RequestMapping(value = "/category-search/{pageNumber}", method = RequestMethod.GET)
 	public String search(@RequestParam("name") String name, Model model, HttpServletRequest request,
-			@PathVariable int pageNumber) {
+			@PathVariable int pageNumber, Principal principal) {
+		// fill admin name sign in
+		String adminname = principal.getName();
+		model.addAttribute("name", adminname);
+
 		if (name.isEmpty()) {
 			return "redirect:/admin/category";
 		}
@@ -73,8 +77,12 @@ public class CategoryController {
 	}
 
 	@RequestMapping(value = "/admin/category/page/{pageNumber}", method = RequestMethod.GET)
-	private String listCategory(HttpServletRequest request, @PathVariable int pageNumber, Model model) {
-
+	private String listCategory(HttpServletRequest request, @PathVariable int pageNumber, Model model,
+			Principal principal) {
+		// fill admin name sign in
+		String adminname = principal.getName();
+		model.addAttribute("name", adminname);
+		
 		// pagination
 		PagedListHolder<?> pages = (PagedListHolder<?>) request.getSession().getAttribute("categorylist");
 		int pageSize = 3;

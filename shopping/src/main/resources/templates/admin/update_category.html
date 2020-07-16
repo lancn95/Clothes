@@ -10,9 +10,7 @@
                 <main>
                     <div class="container-fluid">
                         <h1 class="mt-4">Tạo Mới Danh Mục</h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Tạo sản phẩm Mới</li>
-                        </ol>
+                        <ol th:replace = "admin/common :: breadcumb-update-category"></ol>
                         <div class="row">
                         	<div class="col-md-6">
 								<form method="POST" th:action="@{/admin/category-update}"

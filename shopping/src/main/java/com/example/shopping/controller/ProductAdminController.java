@@ -24,7 +24,6 @@ import com.example.shopping.service.Impl.CategoryServiceImpl;
 import com.example.shopping.service.Impl.ProductServiceImpl;
 
 @Controller
-@Transactional
 public class ProductAdminController {
 
 	@Autowired
@@ -37,18 +36,23 @@ public class ProductAdminController {
 
 	@RequestMapping(value = "/product-search/{pageNumber}", method = RequestMethod.GET)
 	public String search(@RequestParam("name") String name, Model model, HttpServletRequest request,
-														@PathVariable int pageNumber) {
+
+			@PathVariable int pageNumber, Principal principal) {
+		// fill admin name sign in
+		String adminname = principal.getName();
+		model.addAttribute("name", adminname);
+
 		if (name.isEmpty()) {
 			return "redirect:/admin/product";
 		}
 
-		List<ProductInfo> list = productServiceImpl.seachByNameLike(name);
-		if (list == null || list.size() < 0) {
+		List<ProductInfo> products = productServiceImpl.seachByNameLike(name);
+		if (products == null || products.size() < 0) {
 			return "redirect:/admin/product";
 		}
 		PagedListHolder<?> pages = (PagedListHolder<?>) request.getSession().getAttribute("productlist");
 		int pageSize = 3;
-		pages = new PagedListHolder<>(list);
+		pages = new PagedListHolder<>(products);
 		pages.setPageSize(pageSize);
 
 		final int goToPage = pageNumber - 1;
@@ -58,7 +62,7 @@ public class ProductAdminController {
 
 		request.getSession().setAttribute("productlist", pages);
 		int current = pages.getPage() + 1;
-		int begin = Math.max(1, current - list.size());
+		int begin = Math.max(1, current - products.size());
 		int end = Math.min(begin + 5, pages.getPageCount());
 		int totalPageCount = pages.getPageCount();
 		String baseUrl = "/admin/product/page/";
@@ -72,6 +76,7 @@ public class ProductAdminController {
 
 		return "admin/list_product";
 	}
+
 	// search product end
 
 	// product list pagination begin
@@ -90,34 +95,39 @@ public class ProductAdminController {
 		model.addAttribute("name", adminname);
 
 		// pagination
-		PagedListHolder<?> pages = (PagedListHolder<?>) request.getSession().getAttribute("productlist");
-		int pagesize = 3;
-		// List<Product> list = productServiceImpl.findAll();
-		List<ProductInfo> list = productServiceImpl.findAllProInfo();
-		if (pages == null) {
-			pages = new PagedListHolder<>(list);
-			pages.setPageSize(pagesize);
-		} else {
-			final int goToPage = pageNumber - 1;
-			if (goToPage <= pages.getPageCount() && goToPage >= 0) {
-				pages.setPage(goToPage);
+		try {
+			PagedListHolder<?> pages = (PagedListHolder<?>) request.getSession().getAttribute("productlist");
+			int pagesize = 3;
+			// List<Product> list = productServiceImpl.findAll();
+
+			List<ProductInfo> lists = productServiceImpl.findAllProInfo();
+			if (pages == null) {
+				pages = new PagedListHolder<>(lists);
+				pages.setPageSize(pagesize);
+			} else {
+				final int goToPage = pageNumber - 1;
+				if (goToPage <= pages.getPageCount() && goToPage >= 0) {
+					pages.setPage(goToPage);
+				}
 			}
+			request.getSession().setAttribute("productlist", pages);
+			int current = pages.getPage() + 1;
+			int begin = 1;
+			int end = pages.getPageCount();
+			int totalPageCount = pages.getPageCount();
+			String baseUrl = "/admin/product/page/";
+
+			model.addAttribute("beginIndex", begin);
+			model.addAttribute("endIndex", end);
+			model.addAttribute("currentIndex", current);
+			model.addAttribute("totalPageCount", totalPageCount);
+			model.addAttribute("baseUrl", baseUrl);
+			model.addAttribute("products", pages);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		request.getSession().setAttribute("productlist", pages);
-		int current = pages.getPage() + 1;
-		int begin = Math.max(1, current - list.size());
-		int end = Math.min(begin + 5, pages.getPageCount());
-		int totalPageCount = pages.getPageCount();
-		String baseUrl = "/admin/product/page/";
-
-		model.addAttribute("beginIndex", begin);
-		model.addAttribute("endIndex", end);
-		model.addAttribute("currentIndex", current);
-		model.addAttribute("totalPageCount", totalPageCount);
-		model.addAttribute("baseUrl", baseUrl);
-		model.addAttribute("products", pages);
-
 		return "admin/list_product";
+
 	}
 	// product list pagination end
 
@@ -153,7 +163,9 @@ public class ProductAdminController {
 				productForm = new ProductForm(product);
 			}
 		}
-
+		// get list categories
+		List<Category> categories = categoryServiceImpl.findAll();
+		model.addAttribute("categories", categories);
 		model.addAttribute("productForm", productForm);
 		return "admin/update_product";
 	}

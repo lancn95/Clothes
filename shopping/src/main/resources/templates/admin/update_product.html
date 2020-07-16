@@ -10,9 +10,7 @@
                 <main>
                     <div class="container-fluid">
                         <h1 class="mt-4">Cập nhật sản phẩm </h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Cập nhât sản phẩm</li>
-                        </ol>
+                        <ol th:replace = "admin/common :: breadcumb-update-product"></ol>
                         <div class="row">
                         	<div class="col-md-6">
 								<form method="POST" th:action="@{/admin/product-update}"
@@ -46,6 +44,12 @@
 										<label for="address">Mô tả</label> 
 										<textarea rows="" cols="" class="form-control" 
 										placeholder="Mô tả sản phẩm tại đây" th:field="*{description}"></textarea>
+									</div>
+									<div class="form-group">
+										<label for="category">Danh mục sản phẩm</label> 
+										<select class="form-control" th:field="*{category_id}">
+										  <option th:each="category : ${categories}" th:value="${category.id}" th:utext="${category.name}"></option> 
+										</select>
 									</div>
 									<div style="margin-top: 10px">
 										<button type="submit" class="btn btn-success">Tạo mới</button>

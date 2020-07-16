@@ -9,10 +9,10 @@
                 <main>
                     <div class="container-fluid">
                         <h1 class="mt-4">Danh sách hóa đơn</h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Danh sách hóa đơn</li>
+                        <ol class="breadcrumb mb-4" th:replace="admin/common :: breadcumb-order">
+                            
                         </ol>
-                        <div class="row">
+                        
                         
                            <th:block th:if="${#lists.isEmpty(orders)}">
 								<h3>Không có hóa đơn nào!</h3>
@@ -43,13 +43,16 @@
 											<td th:text="${orderInfo.customerPhone}"></td>
 											<td th:text="${#numbers.formatDecimal(orderInfo.amount,2,3,'COMMA')}"></td>
 											<td></td>
-											<td><a th:href="@{|/admin/order?orderId=${orderInfo.id}|}">Xem</a></td>
+											<td><a th:href="@{|/admin/order?orderId=${orderInfo.id}|}">
+												<i class="fa fa-eye" aria-hidden="true"></i>
+												</a>
+											</td>
 										</tr>
 									</tbody>
 								</table>
 							</th:block> 
                             
-                        </div>
+                       
                     </div>
                 </main>
                 <footer th:replace = "admin/common :: footer">

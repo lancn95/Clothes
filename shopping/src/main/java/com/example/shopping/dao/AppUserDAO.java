@@ -13,15 +13,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.shopping.entities.AppUser;
-import com.example.shopping.entities.Order;
 
 @Transactional
 @Repository
 public class AppUserDAO {
-	
+
 	@Autowired
 	private SessionFactory sessionFactory;
-	
+
 	@Autowired
 	private EntityManager entityManager;
 
@@ -38,6 +37,22 @@ public class AppUserDAO {
 		} catch (NoResultException e) {
 			return null;
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<AppUser> search(String name) {
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			String sql = "select u from " + AppUser.class.getName() + " u "
+					+ "where u.userName like concat ('%', :name ,'%')";
+			Query query = session.createQuery(sql, AppUser.class);
+			query.setParameter("name", name);
+			
+			return query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -65,54 +80,40 @@ public class AppUserDAO {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void saveToken(String token, String email) {
-		try 
-		{
+		try {
 			// nativeQuery : query theo table name,field ở trong Database
-			entityManager.createNativeQuery(
-					"UPDATE App_User SET Reset_Token = ? WHERE Email = ?")
-					.setParameter(1, token)
-					.setParameter(2, email)
-					.executeUpdate();
-		}catch(Exception e) {
+			entityManager.createNativeQuery("UPDATE App_User SET Reset_Token = ? WHERE Email = ?")
+					.setParameter(1, token).setParameter(2, email).executeUpdate();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void updateUserByName(String firstName, String lastName, String street, String town, String email,
 			String phone, String userName) {
 		try {
 			// nativeQuery :query theo table name,field ở trong Database
 			entityManager.createNativeQuery(
 					"UPDATE App_User SET First_Name = ?, Last_Name = ?, Street = ?, Town = ?, Email = ?, phone = ? WHERE User_Name = ?")
-					.setParameter(1, firstName)
-					.setParameter(2, lastName)
-					.setParameter(3, street)
-					.setParameter(4, town)
-					.setParameter(5, email)
-					.setParameter(6, phone)
-					.setParameter(7, userName)
-					.executeUpdate();
+					.setParameter(1, firstName).setParameter(2, lastName).setParameter(3, street).setParameter(4, town)
+					.setParameter(5, email).setParameter(6, phone).setParameter(7, userName).executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void updatePasswordByToken(String password, String token) {
-		try 
-		{
+		try {
 			// nativeQuery : query theo table name,field ở trong Database
-			entityManager.createNativeQuery(
-					"UPDATE App_User SET Encryted_Password = ? WHERE Reset_Token = ?")
-					.setParameter(1, password)
-					.setParameter(2, token)
-					.executeUpdate();
-		}catch(Exception e) {
+			entityManager.createNativeQuery("UPDATE App_User SET Encryted_Password = ? WHERE Reset_Token = ?")
+					.setParameter(1, password).setParameter(2, token).executeUpdate();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public Long getUserIDMax() {
 		String sql = "Select Max(u.userId) from " + AppUser.class.getName() + " u ";
 		Session session = this.sessionFactory.getCurrentSession();
@@ -122,6 +123,6 @@ public class AppUserDAO {
 		if (value == null) {
 			return (long) 0;
 		}
-		return  (Long) value;
+		return (Long) value;
 	}
 }

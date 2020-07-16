@@ -8,11 +8,11 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4">Danh sách danh mục sản phẩm</h1>
-                        <ol th:replace = "admin/common :: breadcumb-categories"></ol>
+                        <h1 class="mt-4">Danh sách người dùng</h1>
+                        <ol th:replace = "admin/common :: breadcumb-info"></ol>
                         <div class="row">
 							<div class="col-6 no-padding">
-								<form class="form-inline" action="#" th:action="@{/category-search/1}" method="get">
+								<form class="form-inline" action="#" th:action="@{/account-search/1}" method="get">
 									<input class="form-control mr-sm-2" type="search" name="name" placeholder="Search by name ..." />
 									<button class="btn btn-primary" type="submit">
 										<i class="fa fa-search"></i> Tìm kiếm
@@ -22,7 +22,7 @@
 					
 							<div class="col-6 no-padding">
 								<a href="#" th:href="@{/admin/category-save}" class="btn btn-success float-right">
-									<i class="fa fa-plus-square"></i> Thêm danh mục
+									<i class="fa fa-plus-square"></i> Thêm người dùng
 								</a>
 							</div>
 						</div>
@@ -35,38 +35,48 @@
 								</button>
 							</div>
 				
-							<th:block th:if="${#lists.isEmpty(categories.pageList)}">
-								<h5>Không có danh mục sản phẩm nào</h5>
+							<th:block th:if="${#lists.isEmpty(accounts.pageList)}">
+								<h5>Không có người dùng nào</h5>
 							</th:block>
 				
-							<th:block th:unless="${#lists.isEmpty(categories.pageList)}">
+							<th:block th:unless="${#lists.isEmpty(accounts.pageList)}">
 								<div class="table-responsive">
-									<h5>Danh sách các danh mục</h5>
+									<h5>Danh sách các người dùng</h5>
 									<table class="table table-bordered table-hover">
 										<thead>
 										<tr>
 											<th>#</th>
-											<th>Mã danh mục sản phẩm</th>
-											<th>Tên danh mục sản phẩm</th>
-											<th>Ngày tạo</th>
-											<th>Sửa</th>
+											<th>Tên người dùng</th>
+											<th>Mật khẩu</th>
+											<th>Trạng thái</th>
+											<th>Họ Tên</th>
+											<th>Vai Trò</th>
+											<th>Địa chỉ</th>
+											<th>Email</th>
+											<th>Số điện thoại</th>
+											<th>Cập nhật</th>
 											<th>Xóa</th>
 										</tr>
 										</thead>
 										<tbody>
-										<tr th:each="category,iterStat : ${categories.pageList}">
+										<tr th:each="user,iterStat : ${accounts.pageList}">
 											<th scope="row" th:text="${iterStat.count}"></th>
-											<td th:text="${category.id}"></td>
-											<td th:text="${category.name}"></td>
-											<td th:text="${category.createDate}"></td>
+											<td th:text="${user.userName}"></td>
+											<td th:text="${user.encrytedPassword}"></td>
+											<td th:text="${user.enabled}"></td>
+											<td th:text="${user.fullname}"></td>
+											<td th:text="${user.role}"></td>
+											<td th:text="${user.street}"></td>
+											<td th:text="${user.email}"></td>
+											<td th:text="${user.phone}"></td>
 											<td>
-												<a href="#" th:href="@{|/admin/category-update?id=${category.id}|}" class="mr-sm-2 text-primary">
+												<a href="#" th:href="@{|/admin/account-update?id=${user.userId}|}" class="mr-sm-2 text-primary">
 													<i class="fas fa-marker"></i> 
 												</a> 
 											</td>
 											<td>	
-												<a href="#" th:href="@{|/admin/category-delete?id=${category.id}|}"
-												onclick="if(!(confirm('Bận có chắc chắn muốn xóa danh mục này không ?'))) return false"
+												<a href="#" th:href="@{|/admin/account-delete?id=${user.userId}|}"
+												onclick="if(!(confirm('Bận có chắc chắn muốn xóa người này không ?'))) return false"
 												 class="text-danger">
 													<i class="fa fa-trash"></i>
 												</a>

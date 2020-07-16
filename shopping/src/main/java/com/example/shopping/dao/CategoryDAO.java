@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.shopping.entities.Category;
 import com.example.shopping.form.CategoryForm;
+import com.example.shopping.utils.Utils;
 
 @Repository
 public class CategoryDAO {
@@ -99,7 +100,8 @@ public class CategoryDAO {
 		session.flush();
 
 	}
-
+	
+	@Transactional(rollbackFor = Exception.class)
 	private boolean deleteById(Class<?> type, Serializable id) {
 		Session session = sessionFactory.getCurrentSession();
 		Object persistentInstance = session.load(type, id);
@@ -110,9 +112,11 @@ public class CategoryDAO {
 		return false;
 	}
 
-	@SuppressWarnings("unused")
+	@Transactional(rollbackFor = Exception.class)
 	public void deleteCategory(CategoryForm categoryForm) {
+		
 		boolean result = this.deleteById(Category.class, categoryForm.getId());
+		
 
 	}
 }

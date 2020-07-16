@@ -9,10 +9,8 @@
                 <main>
                     <div class="container-fluid">
                         <h1 class="mt-4">Danh sách hóa đơn chi tiết</h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Danh sách hóa đơn chi tiết</li>
-                        </ol>
-                        <div class="row">
+                        <ol th:replace="admin/common :: breadcumb-orderDetail"></ol>
+                        <div class="">
                         
                            <th:block th:if="${#lists.isEmpty(orderInfo)}">
 								<h3>Không có hóa đơn nào!</h3>
@@ -34,7 +32,7 @@
 							               </span>
 							            </li>
 							         </ul>
-							      </div>
+						  </div>
 							      <br/>
 							      <table class="table table-bordered table-hover">
 							         <tr>

@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import com.example.shopping.dao.AppUserDAO;
 import com.example.shopping.dao.UserRoleDAO;
 import com.example.shopping.entities.AppUser;
+import com.example.shopping.mapping.UserMapping;
+import com.example.shopping.model.UserInfo;
 import com.example.shopping.service.UserService;
 import com.example.shopping.utils.EncrytedPasswordUtils;
 import com.example.shopping.utils.Utils;
@@ -26,6 +28,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public List<AppUser> findAll() {
 		List<AppUser> appUsers = appUserDAO.findAll();
+		
 		return appUsers;
 	}
 
@@ -101,6 +104,29 @@ public class UserServiceImpl implements UserService{
 	public Long getUserIDMax() {
 		
 		return appUserDAO.getUserIDMax();
+	}
+
+	@Override
+	public List<AppUser> searchByNameLike(String name) {
+		List<AppUser> users = appUserDAO.search(name);
+		
+		return users;
+	}
+
+	@Override
+	public List<UserInfo> findAllUserInfo() {
+		List<AppUser> users = appUserDAO.findAll();
+		
+		List<UserInfo> userInfos = UserMapping.usersToInfos(users);
+		return userInfos;
+	}
+
+	@Override
+	public List<UserInfo> searchByNameLikeUserInfo(String name) {
+		List<AppUser> users = appUserDAO.search(name);
+		
+		List<UserInfo> userInfos = UserMapping.usersToInfos(users);
+		return userInfos;
 	}
 
 	
