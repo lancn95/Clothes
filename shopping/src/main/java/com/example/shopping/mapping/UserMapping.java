@@ -14,9 +14,9 @@ import com.example.shopping.service.Impl.RoleServiceImpl;
 public class UserMapping {
 
 	@Autowired
-	private static RoleServiceImpl roleServiceImpl;
+	private RoleServiceImpl roleServiceImpl;
 
-	public static UserInfo UserToInfo(AppUser appUser) {
+	public UserInfo UserToInfo(AppUser appUser) {
 		if (appUser != null) {
 			UserInfo userInfo = new UserInfo();
 			userInfo.setUserId(appUser.getUserId());
@@ -52,7 +52,7 @@ public class UserMapping {
 		return null;
 	}
 
-	public static List<UserInfo> usersToInfos(List<AppUser> appUsers) {
+	public List<UserInfo> usersToInfos(List<AppUser> appUsers) {
 		List<UserInfo> userInfos = new ArrayList<>();
 		if (appUsers.size() > 0 && appUsers != null) {
 			for (AppUser appUser : appUsers) {

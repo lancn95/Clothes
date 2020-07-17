@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.shopping.entities.AppUser;
+import com.example.shopping.entities.CategoryParent;
 import com.example.shopping.entities.Product;
 import com.example.shopping.form.CustomerForm;
 import com.example.shopping.model.CartInfo;
@@ -34,6 +35,7 @@ import com.example.shopping.model.CartLineInfo;
 import com.example.shopping.model.CustomerInfo;
 import com.example.shopping.model.ProductInfo;
 import com.example.shopping.model.UserInfo;
+import com.example.shopping.service.CategoryParentService;
 import com.example.shopping.service.EmailService;
 import com.example.shopping.service.Impl.EmailServiceImpl;
 import com.example.shopping.service.Impl.OrderServiceImpl;
@@ -64,6 +66,9 @@ public class MainController {
 	@Autowired
 	private CustomerFormValidator customerFormValidator;
 
+	@Autowired
+	private CategoryParentService categoryParentService;
+
 	@InitBinder
 	public void myInitBinder(WebDataBinder dataBinder) {
 		Object target = dataBinder.getTarget();
@@ -90,8 +95,20 @@ public class MainController {
 	public String welcomePage(Model model) {
 		model.addAttribute("title", "Welcome");
 		model.addAttribute("message", "This is welcome page!");
+
+		List<CategoryParent> list = categoryParentService.findAll();
+
+		model.addAttribute("categoryParents", list);
 		return "customer/index";
 	}
+
+	// test url category parent begin
+	@RequestMapping(value = { "ao" }, method = RequestMethod.GET)
+	public String wwelcomePage(Model model) {
+
+		return "redirect:/product";
+	}
+	// test url category parent end
 
 	// display forgotPassword page
 	@RequestMapping(value = "/forgot-password", method = RequestMethod.GET)
@@ -109,7 +126,7 @@ public class MainController {
 		AppUser u = emailServiceImpl.findByEmail(user.getEmail());
 
 		System.out.println("Name user: " + u.getUserName());
-		if(u.isEnabled() == false) {
+		if (u.isEnabled() == false) {
 			model.addAttribute("successMessage", "Tài khoản này đã bị khóa");
 			return "customer/forgotPassword";
 		}
@@ -185,6 +202,53 @@ public class MainController {
 		return "redirect:/login";
 	}
 
+	// search product begin
+
+	@RequestMapping(value = "/search/{pageNumber}", method = RequestMethod.GET)
+	public String search(@RequestParam("name") String name, Model model, HttpServletRequest request,
+
+			@PathVariable int pageNumber, Principal principal) {
+		// get all category parent to view begin
+		List<CategoryParent> list = categoryParentService.findAll();
+
+		model.addAttribute("categoryParents", list);
+		// get all category parent to view end
+		if (name.isEmpty()) {
+			return "redirect:/product";
+		}
+
+		List<ProductInfo> products = productServiceImpl.seachByNameLike(name);
+		if (products == null || products.size() < 0) {
+			return "redirect:/product";
+		}
+		PagedListHolder<?> pages = (PagedListHolder<?>) request.getSession().getAttribute("productlis");
+		int pageSize = 9;
+		pages = new PagedListHolder<>(products);
+		pages.setPageSize(pageSize);
+
+		final int goToPage = pageNumber - 1;
+		if (goToPage <= pages.getPageCount() && goToPage >= 0) {
+			pages.setPage(goToPage);
+		}
+
+		request.getSession().setAttribute("productlist", pages);
+		int current = pages.getPage() + 1;
+		int begin = Math.max(1, current - products.size());
+		int end = Math.min(begin + 5, pages.getPageCount());
+		int totalPageCount = pages.getPageCount();
+		String baseUrl = "/admin/product/page/";
+
+		model.addAttribute("beginIndex", begin);
+		model.addAttribute("endIndex", end);
+		model.addAttribute("currentIndex", current);
+		model.addAttribute("totalPageCount", totalPageCount);
+		model.addAttribute("baseUrl", baseUrl);
+		model.addAttribute("products", pages);
+
+		return "customer/shop";
+	}
+	// search product end
+
 	@RequestMapping(value = "/product", method = RequestMethod.GET)
 	public String listProduct(HttpServletRequest request, Model model) {
 		request.getSession().setAttribute("productlist", null);
@@ -194,6 +258,10 @@ public class MainController {
 
 	@RequestMapping(value = "/product/page/{pageNumber}", method = RequestMethod.GET)
 	public String listProductHandler(HttpServletRequest request, @PathVariable int pageNumber, Model model) {
+		List<CategoryParent> list = categoryParentService.findAll();
+
+		model.addAttribute("categoryParents", list);
+
 		PagedListHolder<?> pages = (PagedListHolder<?>) request.getSession().getAttribute("productlis");
 		int pageSize = 9;
 		List<Product> products = productServiceImpl.findAll();

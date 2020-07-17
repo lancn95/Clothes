@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="/css/jquery-ui.min.css" type="text/css">
     <link rel="stylesheet" href="/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="/css/style.css" type="text/css">
-    
+
 </head>
 
 <body>
@@ -46,21 +46,14 @@
                     </div>
                 </div>
                 <div class="ht-right">
+                	
                    <a th:if="${#request.userPrincipal == null}" th:href="@{/login}" class="login-panel">
                    		<i class="fa fa-user"></i>Login
                    </a>
-
                    <a th:if="${#request.userPrincipal != null}" th:href = "@{/logout}" class="login-panel">
-                   		<i class="fa fa-user"></i>Logout
-                   </a>
-                    <div class="lan-selector">
-                        <select class="language_drop" name="countries" id="countries" style="width:300px;">
-                            <option value='yt' data-image="/img/flag-1.jpg" data-imagecss="flag yt"
-                                data-title="English">English</option>
-                            <option value='yu' data-image="/img/flag-2.jpg" data-imagecss="flag yu"
-                                data-title="Bangladesh">German </option>
-                        </select>
-                    </div>
+                        <i class="fa fa-sign-out" aria-hidden="true"></i>Đăng xuất
+                   </a> 
+
                     <div class="top-social">
                         <a href="#"><i class="ti-facebook"></i></a>
                         <a href="#"><i class="ti-twitter-alt"></i></a>
@@ -83,9 +76,10 @@
                     <div class="col-lg-7 col-lg-7">
                         <div class="advanced-search">
                             <button type="button" class="category-btn">All Categories</button>
-                            <form action="#" class="input-group">
-                                <input type="text" placeholder="What do you need?">
-                                <button type="button"><i class="ti-search"></i></button>
+                            
+                            <form th:action="@{/search/1}" class="input-group" method="GET">
+                                <input type="text" placeholder="What do you need?" name="name">
+                                <button type="submit"><i class="ti-search"></i></button>
                             </form>
                         </div>
                     </div>
@@ -159,31 +153,20 @@
                     <div class="depart-btn">
                         <i class="ti-menu"></i>
                         <span>All departments</span>
-                        <ul class="depart-hover">
-                            <li class="active"><a href="#">Women’s Clothing</a></li>
-                            <li><a href="#">Men’s Clothing</a></li>
-                            <li><a href="#">Underwear</a></li>
-                            <li><a href="#">Kid's Clothing</a></li>
-                            <li><a href="#">Brand Fashion</a></li>
-                            <li><a href="#">Accessories/Shoes</a></li>
-                            <li><a href="#">Luxury Brands</a></li>
-                            <li><a href="#">Brand Outdoor Apparel</a></li>
+                        
+                        <ul class="depart-hover" >
+							<li  th:each="item,status : ${categoryParents}">
+                                <a th:href="${item.url}" th:text="${item.name}"></a>
+                            </li>
                         </ul>
                     </div>
                 </div>
                 <nav class="nav-menu mobile-menu">
                     <ul>
                         <li><a th:href="@{/}">Home</a></li>
-                        <li><a th:href="@{/product}">Shop</a></li>
-                        <li><a href="#">Collection</a>
-                            <ul class="dropdown">
-                                <li><a href="#">Men's</a></li>
-                                <li><a href="#">Women's</a></li>
-                                <li><a href="#">Kid's</a></li>
-                            </ul>
-                        </li>
-                        <li><a th:href="@{/blog}">Blog</a></li>
-                        <li><a href="./contact.html">Contact</a></li>
+                        <li><a th:href="@{/product}">Cửa hàng</a></li>
+                        <li><a th:href="@{/blog}">Blogs</a></li>
+                        <li><a href="./contact.html">Liên hệ</a></li>
                         <li><a href="#">Pages</a>
                             <ul class="dropdown">
                                 <li><a th:href="@{/blogDetail}">Blog Details</a></li>
@@ -191,6 +174,10 @@
                                 <li><a th:href="@{/shoppingCartConfirmation}">Checkout</a></li>
                                 <li><a th:href="@{/register}">Register</a></li>
                                 <li><a th:href="@{/login}">Login</a></li>
+                                <th:block th:if="${#request.userPrincipal != null}">
+                                    <li><a th:href="@{/userInfo}">Thông tin tài khoản</a></li>
+                                    <li><a th:href="@{/login}">Thông tin đơn hàng</a></li>
+                                </th:block>
                             </ul>
                         </li>
                     </ul>
@@ -623,7 +610,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <script src="/js/jquery.slicknav.js"></script>
     <script src="/js/owl.carousel.min.js"></script>
     <script src="/js/main.js"></script>
-   
+
     </footer>
 </body>
 

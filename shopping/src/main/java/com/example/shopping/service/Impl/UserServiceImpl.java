@@ -25,6 +25,9 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	private UserRoleDAO userRoleDAO;
 	
+	@Autowired
+	private UserMapping userMapping;
+	
 	@Override
 	public List<AppUser> findAll() {
 		List<AppUser> appUsers = appUserDAO.findAll();
@@ -117,7 +120,7 @@ public class UserServiceImpl implements UserService{
 	public List<UserInfo> findAllUserInfo() {
 		List<AppUser> users = appUserDAO.findAll();
 		
-		List<UserInfo> userInfos = UserMapping.usersToInfos(users);
+		List<UserInfo> userInfos = userMapping.usersToInfos(users);
 		return userInfos;
 	}
 
@@ -125,7 +128,7 @@ public class UserServiceImpl implements UserService{
 	public List<UserInfo> searchByNameLikeUserInfo(String name) {
 		List<AppUser> users = appUserDAO.search(name);
 		
-		List<UserInfo> userInfos = UserMapping.usersToInfos(users);
+		List<UserInfo> userInfos = userMapping.usersToInfos(users);
 		return userInfos;
 	}
 
