@@ -39,6 +39,9 @@ public class Order implements Serializable{
  
     @Column(name = "Customer_Phone", length = 128, nullable = false)
     private String customerPhone;
+    
+    @Column(name="customer_id")
+    private Long customerId;
 
 	public String getId() {
 		return id;
@@ -103,6 +106,15 @@ public class Order implements Serializable{
 	public void setCustomerPhone(String customerPhone) {
 		this.customerPhone = customerPhone;
 	}
+
+	public Long getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(Long customerId) {
+		this.customerId = customerId;
+	}
     
+	
     
 }

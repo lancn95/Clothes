@@ -7,11 +7,13 @@ import com.example.shopping.model.OrderDetailInfo;
 import com.example.shopping.model.OrderInfo;
 
 public interface OrderService {
-	public void saveOrder(CartInfo cartInfo);
+	public void saveOrder(CartInfo cartInfo, Long CustomerId);
 	
 	public List<OrderInfo> findAll();
 	
 	public OrderInfo findOrderInfo(String orderId);
 	
 	public List<OrderDetailInfo> findAllOrderDetail(String orderId);
+	
+	public List<OrderInfo> findOrdersByCusID(Long customerId);
 }

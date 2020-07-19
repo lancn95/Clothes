@@ -4,7 +4,9 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 @Entity
@@ -17,10 +19,10 @@ public class Category {
 
 	@Column(name = "NAME")
 	private String name;
-	
+
 	@Column(name = "Create_Date", nullable = false)
 	private Date createDate;
-	
+
 	public String getId() {
 		return id;
 	}
@@ -44,7 +46,5 @@ public class Category {
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
-	
-	
-	
-}	
+
+}

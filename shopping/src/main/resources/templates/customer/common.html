@@ -176,7 +176,7 @@
                                 <li><a th:href="@{/login}">Login</a></li>
                                 <th:block th:if="${#request.userPrincipal != null}">
                                     <li><a th:href="@{/userInfo}">Thông tin tài khoản</a></li>
-                                    <li><a th:href="@{/login}">Thông tin đơn hàng</a></li>
+                                    <li><a th:href="@{/yourOrders}">Thông tin đơn hàng</a></li>
                                 </th:block>
                             </ul>
                         </li>
@@ -337,6 +337,18 @@
                     <div class="breadcrumb-text">
                         <a th:href="@{/}"><i class="fa fa-home"></i> Home</a>
                         <span>Register</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="breacrumb-section" th:fragment="breacrumb-section-yourOrders">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb-text">
+                        <a th:href="@{/}"><i class="fa fa-home"></i> Home</a>
+                        <span>Your Orders</span>
                     </div>
                 </div>
             </div>

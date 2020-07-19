@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.shopping.entities.AppUser;
 
-@Transactional
 @Repository
 public class AppUserDAO {
 
@@ -24,7 +23,7 @@ public class AppUserDAO {
 	@Autowired
 	private EntityManager entityManager;
 
-	@SuppressWarnings("unused")
+	@Transactional(rollbackFor = Exception.class)
 	public AppUser findUserAccount(String userName) {
 		try {
 			Session session = sessionFactory.getCurrentSession();

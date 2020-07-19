@@ -43,7 +43,7 @@ public class OrderDAO {
 	}
 
 	@Transactional(rollbackFor = Exception.class)
-	public void saveOder(CartInfo cartInfo) {
+	public void saveOder(CartInfo cartInfo, Long customerId) {
 		Session session = sessionFactory.getCurrentSession();
 		int orderNum = this.getOrderMax() + 1;
 
@@ -56,7 +56,7 @@ public class OrderDAO {
 		order.setCustomerEmail(cartInfo.getCustomerInfo().getEmail());
 		order.setCustomerAddress(cartInfo.getCustomerInfo().getAddress());
 		order.setCustomerPhone(cartInfo.getCustomerInfo().getPhone());
-
+		order.setCustomerId(customerId);
 		session.persist(order);
 
 		for (CartLineInfo line : cartInfo.getCartLines()) {
@@ -81,7 +81,8 @@ public class OrderDAO {
 
 		session.flush();
 	}
-
+	
+	
 	@Transactional(rollbackFor = Exception.class)
 	public List<OrderInfo> findAll() {
 		try {
@@ -102,6 +103,27 @@ public class OrderDAO {
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
+	public List<OrderInfo> findOrdersByCusID(Long customerId) {
+		try {
+			String sql = "Select new " + OrderInfo.class.getName()//
+					+ "(ord.id, ord.orderDate, ord.orderNum, ord.amount, "
+					+ " ord.customerName, ord.customerAddress, ord.customerEmail, ord.customerPhone) " + " from "
+					+ Order.class.getName() + " ord "//
+					+ " where ord.customerId = :customerId"
+					+ " order by ord.orderNum desc";
+			Session session = this.sessionFactory.getCurrentSession();
+
+			Query<OrderInfo> query = session.createQuery(sql, OrderInfo.class);
+			query.setParameter("customerId", customerId);
+			return query.getResultList();
+		} catch (NoResultException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
 	 public Order findOrder(String orderId) {
 	        Session session = this.sessionFactory.getCurrentSession();
 	        return session.find(Order.class, orderId);
@@ -113,9 +135,16 @@ public class OrderDAO {
         if (order == null) {
             return null;
         }
+        if(order.getCustomerId() != null) {
+        	return new OrderInfo(order.getId(), order.getOrderDate(), //
+                    order.getOrderNum(), order.getAmount(), order.getCustomerName(), //
+                    order.getCustomerAddress(), order.getCustomerEmail(), order.getCustomerPhone(),
+                    order.getCustomerId());
+        }
         return new OrderInfo(order.getId(), order.getOrderDate(), //
                 order.getOrderNum(), order.getAmount(), order.getCustomerName(), //
                 order.getCustomerAddress(), order.getCustomerEmail(), order.getCustomerPhone());
+        
     }
 	 
 	@Transactional(rollbackFor = Exception.class)
@@ -131,4 +160,6 @@ public class OrderDAO {
  
         return query.getResultList();
     }
+	
+	
 }
