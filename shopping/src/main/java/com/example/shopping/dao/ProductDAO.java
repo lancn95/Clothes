@@ -19,6 +19,7 @@ import com.example.shopping.entities.Category;
 import com.example.shopping.entities.Product;
 import com.example.shopping.form.ProductForm;
 import com.example.shopping.model.ProductInfo;
+import com.example.shopping.utils.DeleteCommon;
 import com.example.shopping.utils.Utils;
 
 @Repository
@@ -161,25 +162,29 @@ public class ProductDAO {
 
 	}
 	
-	@Transactional(rollbackFor = Exception.class)
-	private boolean deleteById(Class<?> type, Serializable id) {
-		Session session = sessionFactory.getCurrentSession();
-		Object persistentInstance = session.load(type, id);
-		if (persistentInstance != null) {
-			session.delete(persistentInstance);
-			return true;
-		}
-		return false;
-	}
 
-	
 	@Transactional(rollbackFor = Exception.class)
 	public void deleteProduct(ProductForm productForm) {
 		 //session.delete(object) chỉ thực hiện đc khi chưa có khóa chính hoặc ngoại
+		DeleteCommon deleteCommon = new DeleteCommon();
 		
-		boolean result = this.deleteById(Product.class, productForm.getCode());
+		boolean result = deleteCommon.deleteById(Product.class, productForm.getCode(), sessionFactory);
 
 
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	public List<Product> filter(String min, String max){
+		Session session = sessionFactory.getCurrentSession();
+		double minConvert = Double.parseDouble(min);
+		double maxConvert = Double.parseDouble(max);
+		String sql = "select p from " + Product.class.getName() + " p "
+				+" where p.price between :min and :max ";
+		Query<Product> query = session.createQuery(sql, Product.class);
+		query.setParameter("min", minConvert);
+		query.setParameter("max", maxConvert);
+		
+		return query.getResultList();
 	}
 
 }

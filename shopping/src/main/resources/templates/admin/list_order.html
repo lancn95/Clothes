@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head th:replace = "admin/common :: head"></head>
+    <style>
+    	.dcxl{
+    		color:red;
+    	}
+    	.clh{
+    		color:yellow;
+    	}
+    </style>
     <body class="sb-nav-fixed">
         <nav th:replace="admin/common :: topnav"></nav>
         <div id="layoutSidenav">
@@ -42,7 +50,7 @@
 											<td th:text="${orderInfo.customerEmail}"></td>
 											<td th:text="${orderInfo.customerPhone}"></td>
 											<td th:text="${#numbers.formatDecimal(orderInfo.amount,2,3,'COMMA')}"></td>
-											<td></td>
+											<td th:text="${orderInfo.status}" th:classappend="${orderInfo.status} ? dcxl : clh"></td>
 											<td><a th:href="@{|/admin/order?orderId=${orderInfo.id}|}">
 												<i class="fa fa-eye" aria-hidden="true"></i>
 												</a>

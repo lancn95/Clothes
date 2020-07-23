@@ -92,7 +92,7 @@ alter table ORDERS
   add constraint ORDERS_PK primary key (ID) ;
 alter table ORDERS
   add constraint ORDER_UK unique (ORDER_NUM) ;
-
+alter table orders add column status nvarchar(15);
 -- Create table
 create table ORDER_DETAILS
 (
@@ -140,8 +140,26 @@ alter table categories
   references category_parent (ID);
 
 create table category_parent(
-	ID varchar(30),
+	ID int auto_increment(30),
     NAME varchar(50),
     URL varchar(70)
 );
 alter table category_parent add constraint category_parent_PK primary key (ID);
+
+create table carousel(
+	id int primary key auto_increment,
+    name nvarchar(30),
+    IMAGE longblob
+);
+alter table carousel add column createdate datetime not null;
+alter table carousel add column description nvarchar(250);
+alter table carousel add column tag nvarchar(30);
+alter table carousel add column url varchar(50);
+alter table carousel add column title nvarchar(50);
+
+create table contact(
+	id int primary key auto_increment,
+    address nvarchar(50) not null,
+    phone nvarchar(15)  not null,
+    email varchar(50)  not null
+);

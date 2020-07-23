@@ -16,10 +16,12 @@
         <div class="container">
             <div class="row">
                  <!-- Filter Begin -->
-                 <div th:replace = "customer/common :: filter"></div>
+				<div th:replace="customer/common :: filter"></div>
                   <!-- Filter End -->
                 <th:block th:if="${#lists.isEmpty(products.pageList)}">
+                 <div class="col-lg-9 order-1 order-lg-2">
 					<h3>Không có sản phẩm nào</h3>
+				</div>
 				</th:block>
 				
 				<th:block th:unless="${#lists.isEmpty(products.pageList)}">

@@ -1,7 +1,11 @@
 package com.example.shopping.entities;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -9,8 +13,9 @@ import javax.persistence.Table;
 @Table(name = "category_parent")
 public class CategoryParent {
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID")
-	private String id;
+	private int id;
 
 	@Column(name = "NAME")
 	private String name;
@@ -18,11 +23,14 @@ public class CategoryParent {
 	@Column(name = "url")
 	private String url;
 
-	public String getId() {
+	@Column(name = "createdate")
+	private Date createDate;
+
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -40,6 +48,14 @@ public class CategoryParent {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
 	}
 
 }

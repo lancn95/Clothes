@@ -8,7 +8,7 @@
         <meta name="author" content="" />
         <title>Dashboard - SB Admin</title>
         <link href="/css/styleAdmin.css" rel="stylesheet" />
-       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
         <!-- Font Awesome -->
 		<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
@@ -40,8 +40,6 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
                         <a class="dropdown-item" th:href="@{/adminInfo}">Thông tin</a>
-                        <a class="dropdown-item" href="#">Activity Log</a>
-                        <div class="dropdown-divider"></div>
                         <a class="dropdown-item" th:href="@{/logout}">Đăng xuất</a>
                     </div>
                 </li>
@@ -99,6 +97,16 @@
                                             <a class="nav-link" href="500.html">500 Page</a>
                                         </nav>
                                     </div>
+                                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseCategoryParent" aria-expanded="false" aria-controls="pagesCollapseCategoryParent">
+                                        Quản lý danh mục cha 
+                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                    </a>
+                                    <div class="collapse" id="pagesCollapseCategoryParent" aria-labelledby="headingOne" data-parent="#sidenavAccordionPages">
+                                        <nav class="sb-sidenav-menu-nested nav">
+                                            <a class="nav-link" th:href="@{/admin/categoryParent}">Danh sách danh mục cha</a>
+
+                                        </nav>
+                                    </div>
                                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseCategory" aria-expanded="false" aria-controls="pagesCollapseCategory">
                                         Quản lý danh mục sản phẩm
                                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
@@ -106,8 +114,7 @@
                                     <div class="collapse" id="pagesCollapseCategory" aria-labelledby="headingOne" data-parent="#sidenavAccordionPages">
                                         <nav class="sb-sidenav-menu-nested nav">
                                             <a class="nav-link" th:href="@{/admin/category}">Danh sách danh mục sản phẩm</a>
-                                            <a class="nav-link" th:href="@{/admin/category-save}">Tạo mới danh mục sản phẩm</a>
-                                            <a class="nav-link" href="password.html">...</a>
+                                            
                                         </nav>
                                     </div>
                                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseProduct" aria-expanded="false" aria-controls="pagesCollapseProduct">
@@ -117,8 +124,7 @@
                                     <div class="collapse" id="pagesCollapseProduct" aria-labelledby="headingOne" data-parent="#sidenavAccordionPages">
                                         <nav class="sb-sidenav-menu-nested nav">
                                             <a class="nav-link" th:href="@{/admin/product}">Danh sách sản phẩm</a>
-                                            <a class="nav-link" th:href="@{/admin/product-save}">Tạo mới sản phẩm</a>
-                                            <a class="nav-link" href="password.html">...</a>
+                                           
                                         </nav>
                                     </div>
                                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseOrder" aria-expanded="false" aria-controls="pagesCollapseOrder">
@@ -139,8 +145,24 @@
                                              <a class="nav-link" th:href="@{/admin/account}">Danh sách người dùng </a>
                                         </nav>
                                     </div>
-
-
+									 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseCarousel" aria-expanded="false" aria-controls="pagesCollapseCarousel">
+                                        Quản lý ảnh bìa
+                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                    </a>
+                                    <div class="collapse" id="pagesCollapseCarousel" aria-labelledby="headingOne" data-parent="#sidenavAccordionPages">
+                                        <nav class="sb-sidenav-menu-nested nav">
+                                             <a class="nav-link" th:href="@{/admin/carousel}">Danh sách ảnh bìa </a>
+                                        </nav>
+                                    </div>
+									<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseContact" aria-expanded="false" aria-controls="pagesCollapseContact">
+                                        Quản lý Liên Hệ
+                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                    </a>
+                                    <div class="collapse" id="pagesCollapseContact" aria-labelledby="headingOne" data-parent="#sidenavAccordionPages">
+                                        <nav class="sb-sidenav-menu-nested nav">
+                                             <a class="nav-link" th:href="@{/admin/contact}">Danh sách Liên Hệ </a>
+                                        </nav>
+                                    </div>
                                 </nav>
                             </div>
                             <div class="sb-sidenav-menu-heading">Addons</div>
@@ -190,6 +212,23 @@
                         </ol>
                         <!-- breadcumb order end -->
                         
+                         <!-- breadcumb category parent begin -->
+                        <ol class="breadcrumb mb-4" th:fragment="breadcumb-categories-parent">
+                            <li class="breadcrumb-item active"><a th:href="@{/admin}">Trang chủ</a></li>
+                            <li class="breadcrumb-item active">Danh mục cha</li>
+                        </ol>
+                        <ol class="breadcrumb mb-4" th:fragment="breadcumb-save-categoryParent">
+                            <li class="breadcrumb-item active"><a th:href="@{/admin}">Trang chủ</a></li>
+                            <li class="breadcrumb-item active"><a th:href="@{/admin/categoryParent}">Danh mục cha</a></li>
+                            <li class="breadcrumb-item active">Thêm mới danh mục cha</li>
+                        </ol>
+                         <ol class="breadcrumb mb-4" th:fragment="breadcumb-update-categoryParent">
+                            <li class="breadcrumb-item active"><a th:href="@{/admin}">Trang chủ</a></li>
+                            <li class="breadcrumb-item active"><a th:href="@{/admin/categoryParent}">Danh mục sản phẩm</a></li>
+                            <li class="breadcrumb-item active">Cập nhật danh mục cha</li>
+                        </ol>
+                        <!-- breadcumb category parent end -->
+                        
                         <!-- breadcumb category begin -->
                         <ol class="breadcrumb mb-4" th:fragment="breadcumb-categories">
                             <li class="breadcrumb-item active"><a th:href="@{/admin}">Trang chủ</a></li>
@@ -223,6 +262,40 @@
                             <li class="breadcrumb-item active">Cập nhật sản phẩm</li>
                         </ol>
                         <!-- breadcumb product end -->
+                        
+                        <!-- breadcumb product begin -->
+                        <ol class="breadcrumb mb-4" th:fragment="breadcumb-carousels">
+                            <li class="breadcrumb-item active"><a th:href="@{/admin}">Trang chủ</a></li>
+                            <li class="breadcrumb-item active">Danh sách ảnh bìa</li>
+                        </ol>
+                        <ol class="breadcrumb mb-4" th:fragment="breadcumb-save-carousel">
+                            <li class="breadcrumb-item active"><a th:href="@{/admin}">Trang chủ</a></li>
+                            <li class="breadcrumb-item active"><a th:href="@{/admin/carousel}">Danh sách ảnh bìa</a></li>
+                            <li class="breadcrumb-item active">Thêm mới ảnh bìa</li>
+                        </ol>
+                         <ol class="breadcrumb mb-4" th:fragment="breadcumb-update-carousel">
+                            <li class="breadcrumb-item active"><a th:href="@{/admin}">Trang chủ</a></li>
+                            <<li class="breadcrumb-item active"><a th:href="@{/admin/carousel}">Danh sách ảnh bìa</a></li>
+                            <li class="breadcrumb-item active">Cập nhật ảnh bìa</li>
+                        </ol>
+                        <!-- breadcumb product end -->
+                        
+                        <!-- breadcumb contact begin -->
+                        <ol class="breadcrumb mb-4" th:fragment="breadcumb-contacts">
+                            <li class="breadcrumb-item active"><a th:href="@{/admin}">Trang chủ</a></li>
+                            <li class="breadcrumb-item active">Danh sách liện hệ</li>
+                        </ol>
+                        <ol class="breadcrumb mb-4" th:fragment="breadcumb-save-contact">
+                            <li class="breadcrumb-item active"><a th:href="@{/admin}">Trang chủ</a></li>
+                            <li class="breadcrumb-item active"><a th:href="@{/admin/contact}">Danh sách liện hê</a></li>
+                            <li class="breadcrumb-item active">Thêm mới liên hệ</li>
+                        </ol>
+                         <ol class="breadcrumb mb-4" th:fragment="breadcumb-update-contact">
+                            <li class="breadcrumb-item active"><a th:href="@{/admin}">Trang chủ</a></li>
+                            <<li class="breadcrumb-item active"><a th:href="@{/admin/contact}">Danh sách liện hê</a></li>
+                            <li class="breadcrumb-item active">Cập nhật liện hê</li>
+                        </ol>
+                        <!-- breadcumb contact end -->
                    <!-- breadcumbs end -->
                         
                         <div class="row">

@@ -1,33 +1,25 @@
 package com.example.shopping.model;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class FilterInfo {
-	public double from;
-	public double to;
+	public String from;
+	public String to;
 
 	public FilterInfo() {
 	}
 
-	public FilterInfo(double from, double to) {
-		this.from = from;
-		this.to = to;
-	}
-
-	public double getFrom() {
+	public String getFrom() {
 		return from;
 	}
 
-	public void setFrom(double from) {
+	public void setFrom(String from) {
 		this.from = from;
 	}
 
-	public double getTo() {
+	public String getTo() {
 		return to;
 	}
 
-	public void setTo(double to) {
+	public void setTo(String to) {
 		this.to = to;
 	}
 

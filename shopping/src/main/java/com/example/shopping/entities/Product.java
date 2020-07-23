@@ -33,11 +33,16 @@ public class Product implements Serializable {
 
 	@Column(name = "Price", nullable = false)
 	private double price;
-
+	
+	// Method này trả về byte[]
+	// @Lob trong trường hợp này chú thích cho cột BLOB
 	@Lob
 	@Column(name = "Image", length = Integer.MAX_VALUE, nullable = true)
 	private byte[] image;
-
+	
+	// TemporalType.DATE chú thích cột sẽ lưu trữ ngày tháng năm (bỏ đi thời gian)
+	// TemporalType.TIME chú thích cột sẽ lưu trữ thời gian (Giờ phút giây)
+	// TemporalType.TIMESTAMP chú thích cột sẽ lưu trữ ngày tháng và cả thời gian
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "Create_Date", nullable = false)
 	private Date createDate;

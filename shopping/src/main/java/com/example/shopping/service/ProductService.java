@@ -20,4 +20,6 @@ public interface ProductService {
 	List<ProductInfo> seachByNameLike(String name);
 	
 	public List<ProductInfo> findAllProInfo();
+
+	List<ProductInfo> filter(String min, String max);
 }

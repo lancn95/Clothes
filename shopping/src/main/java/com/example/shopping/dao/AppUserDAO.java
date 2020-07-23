@@ -28,7 +28,7 @@ public class AppUserDAO {
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			String sql = "Select e from " + AppUser.class.getName() + " e " + "Where e.userName =:userName ";
-			// HSQL truy vấn trên đối tượng sau đó JPA sẽ translate
+			// HQL truy vấn trên đối tượng sau đó JPA sẽ translate
 			Query query = entityManager.createQuery(sql, AppUser.class);
 			query.setParameter("userName", userName);
 

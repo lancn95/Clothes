@@ -32,6 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception{
 		http.csrf().disable();
+		// chặn các csrf
 		
 		// Các trang không yêu cầu login
 		http.authorizeRequests().antMatchers("/", "/login", "/logout").permitAll();
@@ -55,7 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().and().formLogin()
 		             //Submit URL của trang login
 					.loginPage("/login")
-					.defaultSuccessUrl("/userAccountInfo") // Đường dẫn tới trang đăng nhập thành công
+					.defaultSuccessUrl("/") // Đường dẫn tới trang đăng nhập thành công
 					.failureUrl("/login?error=true") // đường nhẫn tới trang đăng nhập thất bại
 					.usernameParameter("username")
 					.passwordParameter("password")

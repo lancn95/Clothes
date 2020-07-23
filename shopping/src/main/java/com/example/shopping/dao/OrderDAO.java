@@ -57,6 +57,7 @@ public class OrderDAO {
 		order.setCustomerAddress(cartInfo.getCustomerInfo().getAddress());
 		order.setCustomerPhone(cartInfo.getCustomerInfo().getPhone());
 		order.setCustomerId(customerId);
+		order.setStatus("Chờ xử lý");
 		session.persist(order);
 
 		for (CartLineInfo line : cartInfo.getCartLines()) {
@@ -82,14 +83,28 @@ public class OrderDAO {
 		session.flush();
 	}
 	
+	@Transactional(rollbackFor = Exception.class)
+	public void updateStatus(String orderId, String status) {
+		
+		Session session = sessionFactory.getCurrentSession();
+		Order order = this.findOrder(orderId);
+		
+		if(order != null) {
+			order.setStatus(status);
+			session.persist(order);
+			
+			session.flush();
+		}
+		
+	}
 	
 	@Transactional(rollbackFor = Exception.class)
 	public List<OrderInfo> findAll() {
 		try {
 			String sql = "Select new " + OrderInfo.class.getName()//
 					+ "(ord.id, ord.orderDate, ord.orderNum, ord.amount, "
-					+ " ord.customerName, ord.customerAddress, ord.customerEmail, ord.customerPhone) " + " from "
-					+ Order.class.getName() + " ord "//
+					+ " ord.customerName, ord.customerAddress, ord.customerEmail, ord.customerPhone, ord.status) "
+					+ " from " + Order.class.getName() + " ord "//
 					+ " order by ord.orderNum desc";
 			Session session = this.sessionFactory.getCurrentSession();
 
@@ -101,16 +116,15 @@ public class OrderDAO {
 
 		return null;
 	}
-	
+
 	@Transactional(rollbackFor = Exception.class)
 	public List<OrderInfo> findOrdersByCusID(Long customerId) {
 		try {
 			String sql = "Select new " + OrderInfo.class.getName()//
 					+ "(ord.id, ord.orderDate, ord.orderNum, ord.amount, "
-					+ " ord.customerName, ord.customerAddress, ord.customerEmail, ord.customerPhone) " + " from "
+					+ " ord.customerName, ord.customerAddress, ord.customerEmail, ord.customerPhone, ord.status) " + " from "
 					+ Order.class.getName() + " ord "//
-					+ " where ord.customerId = :customerId"
-					+ " order by ord.orderNum desc";
+					+ " where ord.customerId = :customerId" + " order by ord.orderNum desc";
 			Session session = this.sessionFactory.getCurrentSession();
 
 			Query<OrderInfo> query = session.createQuery(sql, OrderInfo.class);
@@ -122,44 +136,43 @@ public class OrderDAO {
 
 		return null;
 	}
-	
+
 	@Transactional(rollbackFor = Exception.class)
-	 public Order findOrder(String orderId) {
-	        Session session = this.sessionFactory.getCurrentSession();
-	        return session.find(Order.class, orderId);
-	    }
-	 	
+	public Order findOrder(String orderId) {
+		Session session = this.sessionFactory.getCurrentSession();
+		return session.find(Order.class, orderId);
+	}
+
 	@Transactional(rollbackFor = Exception.class)
-    public OrderInfo getOrderInfo(String orderId) {
-        Order order = this.findOrder(orderId);
-        if (order == null) {
-            return null;
-        }
-        if(order.getCustomerId() != null) {
-        	return new OrderInfo(order.getId(), order.getOrderDate(), //
-                    order.getOrderNum(), order.getAmount(), order.getCustomerName(), //
-                    order.getCustomerAddress(), order.getCustomerEmail(), order.getCustomerPhone(),
-                    order.getCustomerId());
-        }
-        return new OrderInfo(order.getId(), order.getOrderDate(), //
-                order.getOrderNum(), order.getAmount(), order.getCustomerName(), //
-                order.getCustomerAddress(), order.getCustomerEmail(), order.getCustomerPhone());
-        
-    }
-	 
+	public OrderInfo getOrderInfo(String orderId) {
+		Order order = this.findOrder(orderId);
+		if (order == null) {
+			return null;
+		}
+		if (order.getCustomerId() != null) {
+			return new OrderInfo(order.getId(), order.getOrderDate(), //
+					order.getOrderNum(), order.getAmount(), order.getCustomerName(), //
+					order.getCustomerAddress(), order.getCustomerEmail(), order.getCustomerPhone(), order.getStatus(),
+					order.getCustomerId());
+		}
+		return new OrderInfo(order.getId(), order.getOrderDate(), //
+				order.getOrderNum(), order.getAmount(), order.getCustomerName(), //
+				order.getCustomerAddress(), order.getCustomerEmail(), order.getCustomerPhone(), order.getStatus());
+
+	}
+
 	@Transactional(rollbackFor = Exception.class)
-    public List<OrderDetailInfo> listOrderDetailInfos(String orderId) {
-        String sql = "Select new " + OrderDetailInfo.class.getName() //
-                + "(d.id, d.product.code, d.product.name , d.quantity,d.price,d.amount) "//
-                + " from " + OrderDetail.class.getName() + " d "//
-                + " where d.order.id = :orderId ";
- 
-        Session session = this.sessionFactory.getCurrentSession();
-        Query<OrderDetailInfo> query = session.createQuery(sql, OrderDetailInfo.class);
-        query.setParameter("orderId", orderId);
- 
-        return query.getResultList();
-    }
-	
-	
+	public List<OrderDetailInfo> listOrderDetailInfos(String orderId) {
+		String sql = "Select new " + OrderDetailInfo.class.getName() //
+				+ "(d.id, d.product.code, d.product.name , d.quantity,d.price,d.amount) "//
+				+ " from " + OrderDetail.class.getName() + " d "//
+				+ " where d.order.id = :orderId ";
+
+		Session session = this.sessionFactory.getCurrentSession();
+		Query<OrderDetailInfo> query = session.createQuery(sql, OrderDetailInfo.class);
+		query.setParameter("orderId", orderId);
+
+		return query.getResultList();
+	}
+
 }

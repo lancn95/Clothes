@@ -15,7 +15,9 @@ public class OrderInfo {
 	private String customerAddress;
 	private String customerEmail;
 	private String customerPhone;
+	private String status;
 	private Long customer_id;
+	
 	
 	private List<OrderDetailInfo> details;
 	
@@ -25,7 +27,7 @@ public class OrderInfo {
 
 	// Sử dụng cho JPA/Hibernate Query.
 	public OrderInfo(String id, Date orderDate, int orderNum, double amount, String customerName,
-			String customerAddress, String customerEmail, String customerPhone) {
+			String customerAddress, String customerEmail, String customerPhone, String status) {
 		this.id = id;
 		this.orderDate = orderDate;
 		this.orderNum = orderNum;
@@ -34,11 +36,12 @@ public class OrderInfo {
 		this.customerAddress = customerAddress;
 		this.customerEmail = customerEmail;
 		this.customerPhone = customerPhone;
+		this.status = status;
 		
 
 	}
 	public OrderInfo(String id, Date orderDate, int orderNum, double amount, String customerName,
-			String customerAddress, String customerEmail, String customerPhone, Long customer_id) {
+			String customerAddress, String customerEmail, String customerPhone, String status,Long customer_id) {
 		this.id = id;
 		this.orderDate = orderDate;
 		this.orderNum = orderNum;
@@ -48,6 +51,7 @@ public class OrderInfo {
 		this.customerEmail = customerEmail;
 		this.customerPhone = customerPhone;
 		this.customer_id = customer_id;
+		this.status = status;
 
 	}
 	
@@ -130,6 +134,15 @@ public class OrderInfo {
 	public void setCustomer_id(Long customer_id) {
 		this.customer_id = customer_id;
 	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
 	
 	
 }

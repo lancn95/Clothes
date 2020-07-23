@@ -124,11 +124,11 @@ public class CategoryController {
 	}
 
 	@RequestMapping(value = "/admin/category-save", method = RequestMethod.POST)
-	private String createNewCategory(@ModelAttribute CategoryForm categoryForm, RedirectAttributes reidrect) {
+	private String createNewCategory(@ModelAttribute CategoryForm categoryForm, RedirectAttributes redirect) {
 
 		// save category here
 		categoryServiceImpl.saveCategory(categoryForm);
-		reidrect.addFlashAttribute("successMessage", "Tạo mới thành công");
+		redirect.addFlashAttribute("successMessage", "Tạo mới thành công");
 		return "redirect:/admin/product-save";
 	}
 	// save category end

@@ -35,12 +35,12 @@
     <header class="header-section" th:fragment="header">
         <div class="header-top">
             <div class="container">
-                <div class="ht-left">
-                    <div class="mail-service">
+                <div class="ht-left" th:each="contact : ${contacts}">
+                    <div class="mail-service" th:utext="${contact.email}">
                         <i class=" fa fa-envelope"></i>
-                       catngoclan95@gmail.com
+                       
                     </div>
-                    <div class="phone-service">
+                    <div class="phone-service" th:utext="${contact.phone}">
                         <i class=" fa fa-phone"></i>
                         +0374715013
                     </div>
@@ -48,7 +48,7 @@
                 <div class="ht-right">
                 	
                    <a th:if="${#request.userPrincipal == null}" th:href="@{/login}" class="login-panel">
-                   		<i class="fa fa-user"></i>Login
+                   		<i class="fa fa-user"></i>Đăng nhập
                    </a>
                    <a th:if="${#request.userPrincipal != null}" th:href = "@{/logout}" class="login-panel">
                         <i class="fa fa-sign-out" aria-hidden="true"></i>Đăng xuất
@@ -75,7 +75,7 @@
                     </div>
                     <div class="col-lg-7 col-lg-7">
                         <div class="advanced-search">
-                            <button type="button" class="category-btn">All Categories</button>
+                            <button type="button" class="category-btn">Tất cả các mục</button>
                             
                             <form th:action="@{/search/1}" class="input-group" method="GET">
                                 <input type="text" placeholder="What do you need?" name="name">
@@ -100,30 +100,23 @@
                                     <div class="select-items">
                                         <table>
                                             <tbody>
-                                                <tr>
-                                                    <td class="si-pic"><img src="img/select-product-1.jpg" alt=""></td>
+                                                <tr th:each="cartLineInfo : ${cartLines}">
+                                                    <td class="si-pic">
+                                                    <img th:src="@{|/productImage?code=${cartLineInfo.productInfo.code}|}" alt="" width="100px">
+                                                    </td>
                                                     <td class="si-text">
                                                         <div class="product-selected">
-                                                            <p>$60.00 x 1</p>
-                                                            <h6>Kabino Bedside Table</h6>
+                                                            <p th:text="${#numbers.formatDecimal(cartLineInfo.productInfo.price,2,3,'COMMA')}"> </p>
+                                                            <p th:text="${cartLineInfo.quantity}"></p>
+                                                            <h6 th:text="${cartLineInfo.productInfo.name}"></h6>
                                                         </div>
                                                     </td>
                                                     <td class="si-close">
-                                                        <i class="ti-close"></i>
+                                                    	<a th:href="@{|/shoppingCartRemoveProduct?code=${cartLineInfo.productInfo.code}|}"><i class="ti-close"></i></a>
+                                                       
                                                     </td>
                                                 </tr>
-                                                <tr>
-                                                    <td class="si-pic"><img src="img/select-product-2.jpg" alt=""></td>
-                                                    <td class="si-text">
-                                                        <div class="product-selected">
-                                                            <p>$60.00 x 1</p>
-                                                            <h6>Kabino Bedside Table</h6>
-                                                        </div>
-                                                    </td>
-                                                    <td class="si-close">
-                                                        <i class="ti-close"></i>
-                                                    </td>
-                                                </tr>
+                                            
                                             </tbody>
                                         </table>
                                     </div>
@@ -152,7 +145,7 @@
                 <div class="nav-depart">
                     <div class="depart-btn">
                         <i class="ti-menu"></i>
-                        <span>All departments</span>
+                        <span>Các danh mục</span>
                         
                         <ul class="depart-hover" >
 							<li  th:each="item,status : ${categoryParents}">
@@ -163,17 +156,17 @@
                 </div>
                 <nav class="nav-menu mobile-menu">
                     <ul>
-                        <li><a th:href="@{/}">Home</a></li>
+                        <li><a th:href="@{/}">Trang chủ</a></li>
                         <li><a th:href="@{/product}">Cửa hàng</a></li>
                         <li><a th:href="@{/blog}">Blogs</a></li>
-                        <li><a href="./contact.html">Liên hệ</a></li>
+                        <li><a th:href="@{/contact}">Liên hệ</a></li>
                         <li><a href="#">Pages</a>
                             <ul class="dropdown">
                                 <li><a th:href="@{/blogDetail}">Blog Details</a></li>
-                                <li><a th:href="@{/shoppingCart}">Shopping Cart</a></li>
-                                <li><a th:href="@{/shoppingCartConfirmation}">Checkout</a></li>
-                                <li><a th:href="@{/register}">Register</a></li>
-                                <li><a th:href="@{/login}">Login</a></li>
+                                <li><a th:href="@{/shoppingCart}">Giỏ Hàng</a></li>
+                                <li><a th:href="@{/shoppingCartConfirmation}">Thanh toán</a></li>
+                                <li><a th:href="@{/register}">Đăng Ký</a></li>
+                                <li><a th:href="@{/login}">Đăng Nhập</a></li>
                                 <th:block th:if="${#request.userPrincipal != null}">
                                     <li><a th:href="@{/userInfo}">Thông tin tài khoản</a></li>
                                     <li><a th:href="@{/yourOrders}">Thông tin đơn hàng</a></li>
@@ -233,23 +226,24 @@
         </div>
         <div class="filter-widget">
             <h4 class="fw-title">Price</h4>
-           <!--  <form method="post" th:action="@{/filter}" th:object = ${FilterInfo}> -->
+             <form method="post" th:action="@{/filter/1}" th:object = ${filterInfo}>
 	            <div class="filter-range-wrap">
 	                <div class="range-slider">
 	                    <div class="price-input">
-	                        <input type="text" id="minamount">
-	                        <input type="text" id="maxamount">
+	                        <input type="text" id="minamount" th:field="*{from}" style="margin-right:0px">VNĐ
+	                        <input type="text" id="maxamount" th:field="*{to}" style="margin-left:28px"> VNĐ
 	                    </div>
 	                </div>
 	                <div class="price-range ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"
-	                    data-min="33" data-max="98">
+	                    data-min="99" data-max="999">
 	                    <div class="ui-slider-range ui-corner-all ui-widget-header"></div>
 	                    <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
 	                    <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
 	                </div>
 	            </div>
-	            <a type="submit" class="filter-btn">Filter</a>
-            <!-- </form> -->
+	           
+	            <button type="submit" class="filter-btn">Lọc</button>
+           </form> 
         </div>
         <div class="filter-widget">
             <h4 class="fw-title">Color</h4>
@@ -323,7 +317,7 @@
                 <div class="col-lg-12">
                     <div class="breadcrumb-text">
                         <a th:href="@{/}"><i class="fa fa-home"></i> Home</a>
-                        <span>Login</span>
+                        <span>Đăng nhập</span>
                     </div>
                 </div>
             </div>
@@ -336,19 +330,34 @@
                 <div class="col-lg-12">
                     <div class="breadcrumb-text">
                         <a th:href="@{/}"><i class="fa fa-home"></i> Home</a>
-                        <span>Register</span>
+                        <span>Đăng Ký</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    
     <div class="breacrumb-section" th:fragment="breacrumb-section-yourOrders">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb-text">
                         <a th:href="@{/}"><i class="fa fa-home"></i> Home</a>
-                        <span>Your Orders</span>
+                        <span>Đơn hàng</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="breacrumb-section" th:fragment="breacrumb-section-yourOrdersDetail">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb-text">
+                        <a th:href="@{/}"><i class="fa fa-home"></i> Home</a>
+                        <a th:href="@{/yourOrders}"> Đơn hàng</a>
+                        <span>Chi tiết đơn hàng</span>
                     </div>
                 </div>
             </div>
@@ -362,7 +371,7 @@
                 <div class="col-lg-12">
                     <div class="breadcrumb-text">
                         <a th:href="@{/}"><i class="fa fa-home"></i> Home</a>
-                        <span>Info User</span>
+                        <span>Thông tin tài khoản</span>
                     </div>
                 </div>
             </div>
@@ -377,7 +386,7 @@
                 <div class="col-lg-12">
                     <div class="breadcrumb-text">
                         <a th:href="@{/}"><i class="fa fa-home"></i> Home</a>
-                        <span>Shop</span>
+                        <span>Cửa Hàng</span>
                     </div>
                 </div>
             </div>
@@ -392,8 +401,8 @@
                 <div class="col-lg-12">
                     <div class="breadcrumb-text product-more">
                         <a th:href="@{/}"><i class="fa fa-home"></i> Home</a>
-                        <a th:href="@{/product}">Shop</a>
-                        <span>Detail</span>
+                        <a th:href="@{/product}">Cửa Hàng</a>
+                        <span>Chi tiết sản phẩm</span>
                     </div>
                 </div>
             </div>
@@ -408,8 +417,8 @@
                 <div class="col-lg-12">
                     <div class="breadcrumb-text product-more">
                         <a th:href="@{/}"><i class="fa fa-home"></i> Home</a>
-                        <a th:href="@{/product}">Shop</a>
-                        <span>Shopping Cart</span>
+                        <a th:href="@{/product}">Cửa Hàng</a>
+                        <span>Giỏ hàng</span>
                     </div>
                 </div>
             </div>
@@ -424,8 +433,8 @@
                 <div class="col-lg-12">
                     <div class="breadcrumb-text product-more">
                         <a th:href="@{/}"><i class="fa fa-home"></i> Home</a>
-                        <a th:href="@{/product}">Shop</a>
-                        <span>Check Out</span>
+                        <a th:href="@{/product}">Cửa Hàng</a>
+                        <span>Thanh Toán</span>
                     </div>
                 </div>
             </div>
@@ -462,6 +471,21 @@
         </div>
     </div>
     <!-- Breadcrumb Section Begin -->
+    
+    <!-- Breadcrumb contact Section Begin -->
+    <div class="breacrumb-section-blogs" th:fragment="breacrumb-section-contact">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb-text">
+                        <a th:href="@{/}"><i class="fa fa-home"></i> Home</a>
+                        <span>Liên Hệ</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb  contact Section Begin -->
 	
     <!-- Register Section Begin -->
     <div class="register-login-section spad">
@@ -540,14 +564,20 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-3">
-                    <div class="footer-left">
+                    <div class="footer-left" th:each="contact : ${contacts}">
                         <div class="footer-logo">
                             <a href="#"><img src="/img/footer-logo.png" alt=""></a>
                         </div>
                         <ul>
-                            <li>Address: 60-49 Road 11378 New York</li>
-                            <li>Phone: +65 11.188.888</li>
-                            <li>Email: hello.colorlib@gmail.com</li>
+                            <li>
+                            Address: <span th:utext="${contact.address}"></span> 
+                            </li>
+                            <li >
+                            Phone: <span th:utext="${contact.phone}"></span>
+                            </li>
+                            <li >
+                            Email: <span th:utext="${contact.email}"></span>
+                            </li>
                         </ul>
                         <div class="footer-social">
                             <a href="https://www.facebook.com/"><i class="fa fa-facebook"></i></a>

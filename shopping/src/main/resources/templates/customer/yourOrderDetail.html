@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head th:replace="customer/common :: head">
+</head>
+
+<body>
+    <!-- Header Section Begin -->
+    <header th:replace="customer/common :: header"></header>
+    <!-- Header End -->
+
+    <!-- Breadcrumb Section Begin -->
+    <div th:replace="customer/common :: breacrumb-section-yourOrdersDetail"></div>
+    <!-- Breadcrumb Form Section Begin -->
+
+    <!-- Info User -->
+    	<section class="checkout-section spad">
+        <div class="container">
+        
+        <th:block th:if="${#lists.isEmpty(orderInfo)}">
+			<h3>Không có hóa đơn nào!</h3>
+		</th:block>
+		
+		<th:block th:unless="${#lists.isEmpty(orderInfo)}">
+        	
+            <table class="table table-bordered table-hover">
+		         <tr>
+		            <th>Mã Sản Phẩm</th>
+		            <th>Ảnh</th>
+		            <th>Tên Sản Phẩm</th>
+		            <th>Số lượng</th>
+		            <th>Đơn Giá</th>
+		            <th>Tổng</th>
+		         </tr>
+		         <tr th:each="orderDetailInfo : ${orderInfo.details}">
+		            <td th:utext="${orderDetailInfo.productCode}"></td>
+		            <td>
+		            	<img class="product-image" style="width:100px"
+               									 th:src="@{|/productImage?code=${orderDetailInfo.productCode}|}" /></td>
+		            </td>
+		            <td th:utext="${orderDetailInfo.productName}"></td>
+		            <td th:utext="${orderDetailInfo.quanity}"></td>
+		            <td th:utext="${#numbers.formatDecimal(orderDetailInfo.price,2,3,'COMMA')}"></td>
+		            <td th:utext="${#numbers.formatDecimal(orderDetailInfo.amount,2,3,'COMMA')}"></td>
+		         </tr>
+		      </table>
+        </th:block>
+        </div>
+    </section>
+    
+    <!-- Register Form Section End -->
+
+    <!-- Partner Logo Section Begin -->
+    <div th:replace="customer/common :: logo"></div>
+    <!-- Partner Logo Section End -->
+
+    <!-- Footer Section Begin -->
+    <footer th:replace="customer/common :: footer"></footer>
+    <!-- Footer Section End -->
+</body>
+
+</html>

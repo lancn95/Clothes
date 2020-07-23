@@ -5,53 +5,71 @@
 </head>
 
 <body>
-    <!-- Header Section Begin -->
-    <header th:replace="customer/common :: header"></header>
-    <!-- Header End -->
+	<!-- Header Section Begin -->
+	<header th:replace="customer/common :: header"></header>
+	<!-- Header End -->
 
-    <!-- Breadcrumb Section Begin -->
-    <div th:replace="customer/common :: breacrumb-section-yourOrders"></div>
-    <!-- Breadcrumb Form Section Begin -->
+	<!-- Breadcrumb Section Begin -->
+	<div th:replace="customer/common :: breacrumb-section-yourOrders"></div>
+	<!-- Breadcrumb Form Section Begin -->
 
-    <!-- Info User -->
-    	<section class="checkout-section spad">
-        <div class="container">
-        
-        <th:block th:if="${#lists.isEmpty(orderInfo)}">
-			<h3>Không có hóa đơn nào!</h3>
-		</th:block>
-		
-		<th:block th:unless="${#lists.isEmpty(orderInfo)}">
-        	<h3>Tình trạng đơn hàng:<span>Đang chờ xử lý</span></h3>
-            <table class="table table-bordered table-hover">
-		         <tr>
-		            <th>Product Code</th>
-		            <th>Product Name</th>
-		            <th>Quantity</th>
-		            <th>Price</th>
-		            <th>Amount</th>
-		         </tr>
-		         <tr th:each="orderDetailInfo : ${orderInfo}">
-		            <td th:utext="${orderDetailInfo.productCode}"></td>
-		            <td th:utext="${orderDetailInfo.productName}"></td>
-		            <td th:utext="${orderDetailInfo.quanity}"></td>
-		            <td th:utext="${#numbers.formatDecimal(orderDetailInfo.price,2,3,'COMMA')}"></td>
-		            <td th:utext="${#numbers.formatDecimal(orderDetailInfo.amount,2,3,'COMMA')}"></td>
-		         </tr>
-		      </table>
-        </th:block>
-        </div>
-    </section>
-    
-    <!-- Register Form Section End -->
+	<!-- Info User -->
+	<section class="checkout-section spad">
+		<div class="container">
 
-    <!-- Partner Logo Section Begin -->
-    <div th:replace="customer/common :: logo"></div>
-    <!-- Partner Logo Section End -->
+			<th:block th:if="${#lists.isEmpty(orderInfos)}">
+				<h3>Không có hóa đơn nào!</h3>
+			</th:block>
 
-    <!-- Footer Section Begin -->
-    <footer th:replace="customer/common :: footer"></footer>
-    <!-- Footer Section End -->
+			<th:block th:unless="${#lists.isEmpty(orderInfos)}">
+				<h3>
+					Danh sách đơn hàng của bạn:
+				</h3><br>
+				<table class="table table-bordered table-hover">
+					<thead>
+						<tr>
+							<th>Số hóa đơn</th>
+							<th>Ngày hóa đơn</th>
+							<th>Tên khách hàng</th>
+							<th>Địa chỉ</th>
+							<th>Email khách hàng</th>
+							<th>Số điện thoại khách hàng</th>
+							<th>Tổng số tiền</th>
+							<th>Trạng thái</th>
+							<th>Xem</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="orderInfo : ${orderInfos}">
+							<td th:text="${orderInfo.orderNum}"></td>
+							<td
+								th:text="${#dates.format(orderInfo.orderDate,'dd-MM-yyyy HH:mm')}"></td>
+							<td th:text="${orderInfo.customerName}"></td>
+							<td th:text="${orderInfo.customerAddress}"></td>
+							<td th:text="${orderInfo.customerEmail}"></td>
+							<td th:text="${orderInfo.customerPhone}"></td>
+							<td
+								th:text="${#numbers.formatDecimal(orderInfo.amount,2,3,'COMMA')}"></td>
+							<td th:text="${orderInfo.status}"></td>
+							<td><a th:href="@{|orderDetail?orderId=${orderInfo.id}|}">
+									<i class="fa fa-eye" aria-hidden="true"></i>
+							</a></td>
+						</tr>
+					</tbody>
+				</table>
+			</th:block>
+		</div>
+	</section>
+
+	<!-- Register Form Section End -->
+
+	<!-- Partner Logo Section Begin -->
+	<div th:replace="customer/common :: logo"></div>
+	<!-- Partner Logo Section End -->
+
+	<!-- Footer Section Begin -->
+	<footer th:replace="customer/common :: footer"></footer>
+	<!-- Footer Section End -->
 </body>
 
 </html>

@@ -68,5 +68,14 @@ public class ProductServiceImpl implements ProductService {
 
 	}
 
+	@Override
+	public List<ProductInfo> filter(String min, String max) {
+		List<Product> products = productDAO.filter(min, max);
+		
+		List<ProductInfo> productInfos = ProductMapping.productsToInfos(products);
+		
+		return productInfos;
+	}
+
 
 }

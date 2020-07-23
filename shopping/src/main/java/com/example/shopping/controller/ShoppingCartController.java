@@ -1,6 +1,7 @@
 package com.example.shopping.controller;
 
 import java.security.Principal;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -23,10 +24,8 @@ import com.example.shopping.form.CustomerForm;
 import com.example.shopping.model.CartInfo;
 import com.example.shopping.model.CartLineInfo;
 import com.example.shopping.model.CustomerInfo;
+import com.example.shopping.model.FilterInfo;
 import com.example.shopping.model.ProductInfo;
-import com.example.shopping.service.CategoryParentService;
-import com.example.shopping.service.EmailService;
-import com.example.shopping.service.Impl.EmailServiceImpl;
 import com.example.shopping.service.Impl.OrderServiceImpl;
 import com.example.shopping.service.Impl.ProductServiceImpl;
 import com.example.shopping.service.Impl.UserServiceImpl;
@@ -46,7 +45,6 @@ public class ShoppingCartController {
 
 	@Autowired
 	private CustomerFormValidator customerFormValidator;
-
 
 	@InitBinder
 	public void myInitBinder(WebDataBinder dataBinder) {
@@ -69,10 +67,13 @@ public class ShoppingCartController {
 		}
 
 	}
-	
-	
+
 	@RequestMapping(value = "/productDetail", method = RequestMethod.GET)
 	public String detailProduct(@RequestParam("code") String code, Model model) {
+		// filter
+		FilterInfo filterInfo = new FilterInfo();
+		model.addAttribute("filterInfo", filterInfo);
+		//
 		Product product = null;
 		if (code != null && code.length() > 0) {
 			product = productServiceImpl.findProduct(code);
@@ -149,9 +150,11 @@ public class ShoppingCartController {
 	public String showShoppingCart(HttpServletRequest request, Model model) {
 		CartInfo mycart = Utils.getInfoCartInSession(request);
 		System.out.println("info cartForm in GET: " + mycart.getCartLines());
-
+		
 		model.addAttribute("cartForm", mycart);
-
+		model.addAttribute("quantity", mycart.getQuantityTotal());
+		model.addAttribute("total", mycart.getAmountTotal());
+		model.addAttribute("cartLines", mycart.getCartLines());
 		return "customer/shopping-cart";
 	}
 
@@ -233,15 +236,15 @@ public class ShoppingCartController {
 			AppUser u = userServiceImpl.findByName(principal.getName());
 			// set customer_id vao order
 			orderServiceImpl.saveOrder(cartInfo, u.getUserId());
-		}
-		try {
-			orderServiceImpl.saveOrder(cartInfo, null);
+		} else {
+			try {
+				orderServiceImpl.saveOrder(cartInfo, null);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "redirect:/shoppingCartConfirmation";
+			} catch (Exception e) {
+				e.printStackTrace();
+				return "redirect:/shoppingCartConfirmation";
+			}
 		}
-
 		// Xóa giỏ hàng khỏi session.
 		Utils.removeCartInSession(request);
 
@@ -263,15 +266,6 @@ public class ShoppingCartController {
 		model.addAttribute("lastOrderCart", lastOrderCart);
 
 		return "customer/shoppingCartFinalize";
-	}
-
-	@RequestMapping(value = "/register", method = RequestMethod.GET)
-	public String register(Model model) {
-		AppUser appUser = new AppUser();
-		model.addAttribute("appUser", appUser);
-
-		// System.out.println("GET username: " + appUser.getUserName());
-		return "customer/register";
 	}
 
 }

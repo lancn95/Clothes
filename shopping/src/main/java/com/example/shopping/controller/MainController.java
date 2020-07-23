@@ -2,7 +2,6 @@ package com.example.shopping.controller;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,16 +23,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.shopping.entities.AppUser;
+import com.example.shopping.entities.Carousel;
 import com.example.shopping.entities.CategoryParent;
+import com.example.shopping.entities.Contact;
 import com.example.shopping.entities.Product;
 import com.example.shopping.form.CustomerForm;
 import com.example.shopping.model.CartInfo;
+import com.example.shopping.model.FilterInfo;
 import com.example.shopping.model.OrderDetailInfo;
 import com.example.shopping.model.OrderInfo;
 import com.example.shopping.model.ProductInfo;
+import com.example.shopping.service.CarouselService;
 import com.example.shopping.service.CategoryParentService;
-import com.example.shopping.service.EmailService;
-import com.example.shopping.service.Impl.EmailServiceImpl;
+import com.example.shopping.service.ContactService;
 import com.example.shopping.service.Impl.OrderServiceImpl;
 import com.example.shopping.service.Impl.ProductServiceImpl;
 import com.example.shopping.service.Impl.UserServiceImpl;
@@ -45,6 +47,9 @@ import com.example.shopping.validator.CustomerFormValidator;
 public class MainController {
 
 	@Autowired
+	private CarouselService carouselService;
+
+	@Autowired
 	private UserServiceImpl userServiceImpl;
 
 	@Autowired
@@ -54,16 +59,13 @@ public class MainController {
 	private OrderServiceImpl orderServiceImpl;
 
 	@Autowired
-	private EmailServiceImpl emailServiceImpl;
-
-	@Autowired
-	private EmailService emailService;
-
-	@Autowired
 	private CustomerFormValidator customerFormValidator;
 
 	@Autowired
 	private CategoryParentService categoryParentService;
+
+	@Autowired
+	private ContactService contactService;
 
 	@InitBinder
 	public void myInitBinder(WebDataBinder dataBinder) {
@@ -88,25 +90,29 @@ public class MainController {
 	}
 
 	@RequestMapping(value = { "/", "/welcome" }, method = RequestMethod.GET)
-	public String welcomePage(Model model) {
+	public String welcomePage(Model model, HttpServletRequest request) {
 		model.addAttribute("title", "Welcome");
 		model.addAttribute("message", "This is welcome page!");
+		// show contact ra ngoải view
+		List<Contact> contacts = contactService.finđAll();
+		model.addAttribute("contacts", contacts);
 
+		// show lish ảnh bìa ra ngoải view
+		List<Carousel> carousels = carouselService.findAll();
+		model.addAttribute("carousels", carousels);
+
+		// show lish danh mục cha ra ngoải view
 		List<CategoryParent> list = categoryParentService.findAll();
-
 		model.addAttribute("categoryParents", list);
+
+		// Đẩy các thông tin từng sản phẩm trong giỏ hàng ra ngoài view
+		CartInfo mycart = Utils.getInfoCartInSession(request);
+		model.addAttribute("quantity", mycart.getQuantityTotal());
+		model.addAttribute("total", mycart.getAmountTotal());
+		model.addAttribute("cartLines", mycart.getCartLines());
+
 		return "customer/index";
 	}
-
-	// test url category parent begin
-	@RequestMapping(value = { "ao" }, method = RequestMethod.GET)
-	public String wwelcomePage(Model model) {
-
-		return "redirect:/product";
-	}
-	// test url category parent end
-
-	
 
 	// search product begin
 
@@ -114,6 +120,13 @@ public class MainController {
 	public String search(@RequestParam("name") String name, Model model, HttpServletRequest request,
 
 			@PathVariable int pageNumber, Principal principal) {
+		// show contact ra ngoải view
+		List<Contact> contacts = contactService.finđAll();
+		model.addAttribute("contacts", contacts);
+
+		FilterInfo filterInfo = new FilterInfo();
+		model.addAttribute("filterInfo", filterInfo);
+
 		// get all category parent to view begin
 		List<CategoryParent> list = categoryParentService.findAll();
 
@@ -151,12 +164,18 @@ public class MainController {
 		model.addAttribute("baseUrl", baseUrl);
 		model.addAttribute("products", pages);
 
+		// Đẩy các thông tin từng sản phẩm trong giỏ hàng ra ngoài view
+		CartInfo mycart = Utils.getInfoCartInSession(request);
+		model.addAttribute("quantity", mycart.getQuantityTotal());
+		model.addAttribute("total", mycart.getAmountTotal());
+		model.addAttribute("cartLines", mycart.getCartLines());
 		return "customer/shop";
 	}
 	// search product end
 
 	@RequestMapping(value = "/product", method = RequestMethod.GET)
 	public String listProduct(HttpServletRequest request, Model model) {
+
 		request.getSession().setAttribute("productlist", null);
 
 		return "redirect:/product/page/1";
@@ -164,8 +183,15 @@ public class MainController {
 
 	@RequestMapping(value = "/product/page/{pageNumber}", method = RequestMethod.GET)
 	public String listProductHandler(HttpServletRequest request, @PathVariable int pageNumber, Model model) {
-		List<CategoryParent> list = categoryParentService.findAll();
+		// show contact ra ngoải view
+		List<Contact> contacts = contactService.finđAll();
+		model.addAttribute("contacts", contacts);
 
+		// filter lọc
+		FilterInfo filterInfo = new FilterInfo();
+		model.addAttribute("filterInfo", filterInfo);
+		// danh mục cha
+		List<CategoryParent> list = categoryParentService.findAll();
 		model.addAttribute("categoryParents", list);
 
 		PagedListHolder<?> pages = (PagedListHolder<?>) request.getSession().getAttribute("productlis");
@@ -199,11 +225,27 @@ public class MainController {
 			System.out.println("so luong trong gio: " + mycart.getQuantityTotal());
 			model.addAttribute("quantity", mycart.getQuantityTotal());
 			model.addAttribute("total", mycart.getAmountTotal());
+			System.out.println("cartLine: " + mycart.getCartLines());
+
 		}
+
+		model.addAttribute("cartLines", mycart.getCartLines());
 		return "customer/shop";
 	}
 
-	
+	@RequestMapping(value = "/register", method = RequestMethod.GET)
+	public String register(Model model) {
+		// show contact ra ngoải view
+		List<Contact> contacts = contactService.finđAll();
+		model.addAttribute("contacts", contacts);
+
+		AppUser appUser = new AppUser();
+		model.addAttribute("appUser", appUser);
+
+		// System.out.println("GET username: " + appUser.getUserName());
+		return "customer/register";
+	}
+
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String createUser(@ModelAttribute AppUser appUser, RedirectAttributes redirect, Model model) {
 
@@ -250,7 +292,9 @@ public class MainController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String loginpage(Model model) {
-
+		// show contact ra ngoải view
+		List<Contact> contacts = contactService.finđAll();
+		model.addAttribute("contacts", contacts);
 		return "customer/login";
 	}
 
@@ -262,6 +306,9 @@ public class MainController {
 
 	@RequestMapping(value = "/userInfo", method = RequestMethod.GET)
 	public String userInfo(Model model, Principal principal) {
+		// show contact ra ngoải view
+		List<Contact> contacts = contactService.finđAll();
+		model.addAttribute("contacts", contacts);
 
 		// Sau khi user login thành công sẽ có principal
 		String userName = principal.getName();
@@ -337,39 +384,62 @@ public class MainController {
 		}
 		response.getOutputStream().close();
 	}
-	
-	
+
 	// don hang cua khach
 	@RequestMapping(value = "/yourOrders", method = RequestMethod.GET)
 	public String shoppingCartOfCustomer(Principal principal, Model model) {
+		// show contact ra ngoải view
+		List<Contact> contacts = contactService.finđAll();
+		model.addAttribute("contacts", contacts);
+		//
 		if (principal.getName() == null) {
 			return "redirect:/";
 		}
 		AppUser User = userServiceImpl.findByName(principal.getName());
-		
+
 		Long customerId = User.getUserId();
 		if (User.getEmail() == null || User.getPhone() == null) {
 			return "redirect:/";
 		}
 		// find order by customer id
-		
+
 		List<OrderInfo> orderInfos = orderServiceImpl.findOrdersByCusID(customerId);
-		System.out.println("orderinfos " + orderInfos.size());
-		
-		List<OrderInfo> list = new ArrayList<>();
-		OrderInfo orderInfo = new OrderInfo();
-		for(OrderInfo order : orderInfos) {
-			List<OrderDetailInfo> details = orderServiceImpl.findAllOrderDetail(order.getId());
-			orderInfo.setDetails(details);
-			list.add(orderInfo);
-		
-		}
-		
-		
-		//orderInfo.setDetails(details);
-		model.addAttribute("orderInfo",list);
-		
-		// select * from orders o where o.email = email and o.phone = phone
+
+		// OrderInfo orderInfo = new OrderInfo();
+		// List<OrderDetailInfo> details2 = new ArrayList<>();
+		// for (OrderInfo order : orderInfos) {
+		// List<OrderDetailInfo> details =
+		// orderServiceImpl.findAllOrderDetail(order.getId());
+		// for (OrderDetailInfo dinfo : details) {
+		// details2.add(dinfo);
+		// }
+
+		// }
+		// orderInfo.setDetails(details2);
+
+		model.addAttribute("orderInfos", orderInfos);
+
 		return "customer/yourOrders";
 	}
+
+	@RequestMapping(value = "/orderDetail", method = RequestMethod.GET)
+	private String viewOrderDetailCustomer(Model model, @RequestParam("orderId") String orderId) {
+		// show contact ra ngoải view
+		List<Contact> contacts = contactService.finđAll();
+		model.addAttribute("contacts", contacts);
+		//
+		OrderInfo orderInfo = null;
+		if (orderId != null) {
+			orderInfo = orderServiceImpl.findOrderInfo(orderId);
+		}
+		if (orderInfo == null) {
+			return "redirect:/";
+		}
+		List<OrderDetailInfo> details = orderServiceImpl.findAllOrderDetail(orderId);
+		orderInfo.setDetails(details);
+		model.addAttribute("orderInfo", orderInfo);
+
+		return "customer/yourOrderDetail";
+	}
+
 }

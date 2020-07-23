@@ -16,4 +16,6 @@ public interface OrderService {
 	public List<OrderDetailInfo> findAllOrderDetail(String orderId);
 	
 	public List<OrderInfo> findOrdersByCusID(Long customerId);
+	
+	public void updateStatus(String orderId, String status);
 }

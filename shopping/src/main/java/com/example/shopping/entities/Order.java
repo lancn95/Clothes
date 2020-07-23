@@ -42,7 +42,10 @@ public class Order implements Serializable{
     
     @Column(name="customer_id")
     private Long customerId;
-
+    
+    @Column(name="status")
+    private String status;
+    
 	public String getId() {
 		return id;
 	}
@@ -113,6 +116,14 @@ public class Order implements Serializable{
 
 	public void setCustomerId(Long customerId) {
 		this.customerId = customerId;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
     
 	

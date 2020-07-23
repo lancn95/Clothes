@@ -48,4 +48,10 @@ public class OrderServiceImpl implements OrderService {
 		return orderInfos;
 	}
 
+	@Override
+	public void updateStatus(String orderId, String status) {
+
+		orderDAO.updateStatus(orderId, status);
+	}
+
 }

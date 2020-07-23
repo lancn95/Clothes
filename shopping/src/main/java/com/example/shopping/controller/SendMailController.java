@@ -121,7 +121,8 @@ public class SendMailController {
 		userServiceImpl.updatePassword(userInfo.getEncrytedPassword(), userInfo.getResetToken());
 
 		// update new token
-		String newToken = UUID.randomUUID().toString();
+		// nen set null
+		String newToken = null;
 		userServiceImpl.saveToken(newToken, user.getEmail());
 
 		return "redirect:/login";
